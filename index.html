@@ -34,16 +34,21 @@
   .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
 
   header.site{position:sticky; top:0; z-index:50; background:rgba(236,238,233,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--paper-line);}
-  .nav-row{display:flex; align-items:center; justify-content:space-between; padding:16px 0;}
+  .nav-row{display:flex; align-items:center; justify-content:space-between; padding:16px 0; position:relative;}
   .brand{display:flex; align-items:baseline; gap:8px; font-weight:800; font-size:1.05rem;}
   .brand .tag{font-size:0.62rem; font-family:'IBM Plex Mono', monospace; color:var(--amber-dim); border:1px solid var(--amber-dim); padding:2px 6px; border-radius:2px; letter-spacing:0.05em;}
-  nav.links{display:flex; gap:26px; font-size:0.9rem;}
-  nav.links a{text-decoration:none; color:var(--navy-800);}
+  nav.links{display:flex; gap:15px; font-size:0.82rem; flex-wrap:wrap;}
+  nav.links a{text-decoration:none; color:var(--navy-800); white-space:nowrap;}
   nav.links a:hover{color:var(--seal);}
   .cta-btn{background:var(--ink); color:var(--paper); border:none; padding:10px 18px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:2px; transition:background .15s ease, transform .15s ease;}
   .cta-btn:hover{background:var(--seal); transform:translateY(-1px);}
   .cta-btn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--ink);}
   .cta-btn.ghost:hover{background:var(--ink); color:var(--paper);}
+  .menu-toggle{
+    display:none; background:none; border:1.5px solid var(--ink); width:38px; height:38px;
+    border-radius:2px; cursor:pointer; font-size:1.1rem; align-items:center; justify-content:center;
+    margin-left:8px;
+  }
 
   .hero{background:var(--navy-950); color:var(--paper); position:relative; overflow:hidden; padding:88px 0 96px;}
   .hero-photo{position:absolute; inset:0; background:url('images/field-patrol.jpg') center 20%/cover no-repeat; opacity:0.34; filter:grayscale(35%) contrast(1.05);}
@@ -54,7 +59,7 @@
   .hero-inner{position:relative; z-index:1;}
   .hero-grid{display:grid; grid-template-columns:1.35fr 0.9fr; gap:12px; align-items:end;}
   .hero-visual{display:flex; justify-content:center; align-items:flex-end;}
-  .hero-visual img{max-height:480px; width:auto; filter:drop-shadow(0 22px 34px rgba(0,0,0,0.5));}
+  .hero-visual img{max-height:620px; width:auto; filter:drop-shadow(0 22px 34px rgba(0,0,0,0.5));}
   .status-badge{display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); padding:8px 14px; border-radius:2px; font-size:0.8rem; margin-bottom:28px;}
   .dot-live{width:8px;height:8px;border-radius:50%; background:var(--green-live); animation:pulse 2s infinite;}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,174,122,0.55);} 70%{box-shadow:0 0 0 8px rgba(79,174,122,0);} 100%{box-shadow:0 0 0 0 rgba(79,174,122,0);}}
@@ -73,15 +78,15 @@
   .section-head h2{font-size:clamp(1.6rem, 3vw, 2.2rem); font-weight:800;}
   .section-head p{margin-top:14px; color:#3D4750; font-size:1.02rem;}
 
-  .credential{background:#fff; border:1px solid var(--paper-line); display:grid; grid-template-columns:1fr 260px;}
+  .credential{background:#fff; border:1px solid var(--paper-line); display:grid; grid-template-columns:1fr 320px;}
   .credential-body{padding:44px;}
   .credential-body h3{font-size:1.3rem; font-weight:800; margin-bottom:18px;}
   .credential-list{list-style:none; margin:0; padding:0;}
   .credential-list li{display:flex; gap:14px; padding:13px 0; border-bottom:1px dashed var(--paper-line); font-size:0.96rem;}
   .credential-list li:last-child{border-bottom:none;}
   .credential-list .k{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:#7A8590; width:118px; flex-shrink:0; padding-top:2px;}
-  .seal-panel{background:var(--navy-950); display:flex; align-items:center; justify-content:center; padding:32px;}
-  .brand-logo{width:170px; height:auto;}
+  .seal-panel{background:var(--navy-950); display:flex; align-items:center; justify-content:center; padding:24px;}
+  .brand-logo{width:230px; height:auto;}
 
   .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
   .gallery-item{position:relative; overflow:hidden; background:var(--navy-950); aspect-ratio:4/3;}
@@ -99,6 +104,11 @@
   .cap-card li:last-child{border-bottom:none;}
 
   .par-table{border-top:1px solid var(--ink);}
+  .cost-reason{margin-top:36px; padding-top:32px; border-top:1px solid var(--paper-line);}
+  .cost-reason-lead{font-weight:700; color:var(--ink); margin:0 0 14px;}
+  .cost-factor-list{list-style:none; margin:0 0 18px; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--paper-line); border:1px solid var(--paper-line);}
+  .cost-factor-list li{background:var(--paper); padding:14px 16px; font-size:0.92rem; color:#3D4750;}
+  @media (max-width:600px){ .cost-factor-list{grid-template-columns:1fr 1fr;} }
   .par-row{display:grid; grid-template-columns:140px 1fr; gap:28px; padding:26px 0; border-bottom:1px solid var(--paper-line);}
   .par-row .par-k{font-family:'IBM Plex Mono', monospace; font-size:0.85rem; color:var(--seal); padding-top:2px;}
   .par-row p{margin:0; color:#3D4750; max-width:700px;}
@@ -137,6 +147,13 @@
   .faq-item .faq-a{padding-bottom:22px; color:#3D4750; max-width:700px;}
 
   .mission{background:var(--navy-950); color:var(--paper); text-align:center; padding:80px 0;}
+  .who-list{list-style:none; margin:0 0 44px; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--paper-line); border:1px solid var(--paper-line); max-width:900px;}
+  .who-list li{background:#fff; padding:20px 22px; font-size:1rem; color:var(--ink); display:flex; align-items:flex-start; gap:12px; font-weight:500;}
+  .who-list .check{color:var(--seal); font-weight:800; flex-shrink:0;}
+  .who-message{background:var(--navy-950); padding:56px 32px; text-align:center;}
+  .who-message p{font-family:'Gothic A1', sans-serif; font-weight:800; font-size:clamp(1.3rem, 3.2vw, 2rem); color:var(--paper); line-height:1.55; margin:0;}
+  .who-message p::before, .who-message p::after{content:none;}
+  @media (max-width:700px){ .who-list{grid-template-columns:1fr;} }
   .mission blockquote{font-family:'Gothic A1', sans-serif; font-size:clamp(1.3rem,3vw,1.9rem); font-weight:800; max-width:760px; margin:0 auto 20px; line-height:1.5;}
   .mission cite{font-style:normal; color:var(--amber); font-size:0.9rem;}
 
@@ -208,7 +225,15 @@
 
 
   @media (max-width:860px){
-    nav.links{display:none;}
+    nav.links{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      background:var(--paper); border-bottom:1px solid var(--paper-line);
+      flex-direction:column; gap:0; padding:8px 24px 16px;
+    }
+    nav.links.open{display:flex;}
+    nav.links a{padding:10px 0; border-bottom:1px dashed var(--paper-line);}
+    nav.links a:last-child{border-bottom:none;}
+    .menu-toggle{display:flex;}
     .hero-grid{grid-template-columns:1fr;}
     .hero-visual{order:-1; max-height:220px; overflow:hidden;}
     .hero-visual img{max-height:220px;}
@@ -230,6 +255,7 @@
     <div class="brand">장지도사 <span class="tag">일반·특수 · 비상근</span></div>
     <nav class="links">
       <a href="#credential">소개</a>
+      <a href="#who">이런 업체</a>
       <a href="#field">현장</a>
       <a href="#capability">역량</a>
       <a href="#services">협업 업무</a>
@@ -237,10 +263,12 @@
       <a href="#ai-coding">AI 바이브 코딩</a>
       <a href="#archive">자료실</a>
       <a href="#process">진행절차</a>
+      <a href="#pricing">업무비용</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="cta-btn" href="#contact">전화 상담</a>
     <button type="button" class="admin-toggle" id="adminToggle" title="관리자">🔒</button>
+    <button type="button" class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">☰</button>
   </div>
 </header>
 
@@ -258,9 +286,9 @@
         </div>
         <h1>자격증만 있는 경비지도사가 아닙니다.<br><span class="accent">현장을 뛰고,<br>AI로 일하는 스마트한<br>경비지도사입니다.</span></h1>
         <p class="lede">
-          일반경비지도사이자 특수경비원 신임교육을 수료한 장지도사입니다.
-          실제 경비 현장 근무 경험과 능숙한 컴퓨터·AI 활용 능력을 바탕으로,
-          배치신고부터 순회점검·직무교육·보고서 작성까지 빠르고 정확하게 지원합니다.
+          부산·경남 경비업체의 현장관리와 경비지도사 업무를 지원하는 현장형 경비지도사 장지도사입니다.
+          일반경비지도사이자 특수경비원 신임교육을 수료했고, 실제 경비 현장 근무 경험과
+          능숙한 컴퓨터·AI 활용 능력을 바탕으로 배치신고부터 순회점검·직무교육·보고서 작성까지 빠르고 정확하게 지원합니다.
         </p>
         <div class="hero-ctas">
           <a href="#contact" class="cta-btn">전화로 상담하기</a>
@@ -275,6 +303,25 @@
       <div class="hero-visual">
         <img src="images/character-fullbody.png" alt="경비지도사 캐릭터 일러스트">
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="who" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">이런 업체가 이용하면 좋습니다</span>
+      <h2>이런 업체를 위한 비상근 경비지도사</h2>
+    </div>
+    <ul class="who-list">
+      <li><span class="check">✔</span> 경비지도사 업무를 외부에 맡기고 싶은 경비업체</li>
+      <li><span class="check">✔</span> 소규모 경비업체</li>
+      <li><span class="check">✔</span> 여러 현장을 관리해야 하는 경비업체</li>
+      <li><span class="check">✔</span> 아파트·건물·시설 등의 경비업무를 관리하는 업체</li>
+      <li><span class="check">✔</span> 경비원 관리와 현장점검을 체계적으로 하고 싶은 업체</li>
+    </ul>
+    <div class="who-message">
+      <p>"상시 고용이 부담스럽다면<br><span style="color:var(--amber);">비상근 경비지도사로 효율적으로 관리하세요.</span>"</p>
     </div>
   </div>
 </section>
@@ -350,9 +397,10 @@
         <span class="code">[지도]</span>
         <h3>특수·일반경비 지도·감독</h3>
         <ul>
+          <li>정기 순회점검 프로세스 구축</li>
+          <li>업체에서 정해준 방문 횟수 준수</li>
           <li>대원 근무 기강 점검</li>
           <li>고난도 시설 경비 진단</li>
-          <li>정기 순회점검 프로세스 구축</li>
         </ul>
       </div>
       <div class="cap-card">
@@ -360,17 +408,17 @@
         <h3>방재·산업안전 연계</h3>
         <ul>
           <li>소방안전관리자 1급 기반 자문</li>
-          <li>산업안전 리스크 사전 점검</li>
-          <li>영상정보(CCTV) 관제 운영 점검</li>
+          <li>산업안전기사 자격 기반 산업안전 리스크 사전 점검</li>
+          <li>영상정보관리사 자격 기반 CCTV 관제 운영 점검</li>
         </ul>
       </div>
       <div class="cap-card">
         <span class="code">[행정]</span>
         <h3>AI 기반 스마트 행정</h3>
         <ul>
-          <li>법정 서류·일지 전산화</li>
-          <li>AI 도구 활용 보고서·점검표 작성</li>
-          <li>정기 리포트 작성 및 전달</li>
+          <li>사무자동화산업기사·컴퓨터활용능력 2급 취득 — 능숙한 전산 업무 처리</li>
+          <li>AI 바이브 코딩 가능 — 필요한 업무 도구 직접 제작</li>
+          <li>법정 서류·보고서 자동화 및 정기 리포트 전달</li>
         </ul>
       </div>
     </div>
@@ -496,9 +544,32 @@
   </div>
 </section>
 
+<section id="pricing" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">업무비용</span>
+      <h2>업무비용</h2>
+      <p>현장 규모, 경비원 수, 근무 형태, 방문 횟수 및 업무 범위에 따라 합리적으로 협의합니다.</p>
+    </div>
+    <a href="#contact" class="cta-btn">무료 상담 및 견적 문의</a>
+    <div class="cost-reason">
+      <p class="cost-reason-lead">업체마다</p>
+      <ul class="cost-factor-list">
+        <li>경비원 수</li>
+        <li>현장 수</li>
+        <li>월 방문 횟수</li>
+        <li>거리</li>
+        <li>교육 필요 여부</li>
+        <li>점검 업무</li>
+      </ul>
+      <p class="cost-reason-lead">등이 다르기 때문입니다.</p>
+    </div>
+  </div>
+</section>
+
 <section class="mission">
   <div class="wrap">
-    <blockquote>“특수경비의 전문성으로, 사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
+    <blockquote>“스마트한 경비지도사의 전문성으로, 사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
     <cite>— 장지도사</cite>
   </div>
 </section>
@@ -816,6 +887,20 @@
     applyAdminState();
   });
   applyAdminState();
+
+  /* ===== 모바일 메뉴 토글 ===== */
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.querySelector('nav.links');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    menuToggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.textContent = '☰';
+    });
+  });
 </script>
 
 </body>
