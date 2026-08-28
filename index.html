@@ -161,8 +161,14 @@
   .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
   .contact-info .row{display:flex; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.12); font-size:0.98rem;}
   .contact-info .row .k{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--amber); width:96px; flex-shrink:0; padding-top:2px;}
-  .card-preview{display:flex; gap:14px; flex-wrap:wrap; margin-top:24px;}
-  .card-preview img{width:260px; max-width:100%; border-radius:4px; box-shadow:0 10px 26px rgba(0,0,0,0.4);}
+  .card-preview{display:flex; gap:24px; flex-wrap:wrap; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.12); justify-content:center;}
+  .card-preview img{width:420px; max-width:100%; border-radius:6px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
+  .kakao-link{color:var(--amber); text-decoration:underline; text-underline-offset:3px;}
+  .kakao-link:hover{color:#fff;}
+  .kakao-qr{margin:8px 0 16px 112px; display:flex; align-items:center; gap:14px;}
+  .kakao-qr img{width:96px; height:96px; border-radius:6px; background:#fff; padding:4px;}
+  .kakao-qr p{font-size:0.82rem; color:#B7BEC4; margin:0; max-width:200px;}
+  @media (max-width:500px){ .kakao-qr{margin-left:0;} }
   form.contact-form{display:flex; flex-direction:column; gap:14px;}
   form.contact-form input, form.contact-form textarea{background:var(--navy-900); border:1px solid rgba(255,255,255,0.18); color:var(--paper); padding:13px 14px; font-family:'Noto Sans KR', sans-serif; font-size:0.95rem; border-radius:2px;}
   form.contact-form textarea{resize:vertical; min-height:100px;}
@@ -319,7 +325,7 @@
       <li><span class="check">✔</span> 여러 현장을 관리해야 하는 경비업체</li>
       <li><span class="check">✔</span> 아파트·건물·시설 등의 경비업무를 관리하는 업체</li>
       <li><span class="check">✔</span> 경비원 관리와 현장점검을 체계적으로 하고 싶은 업체</li>
-      <li><span class="check">✔</span> 본사와 현장의 거리가 너무 장거리라서 관리가 어려운 업체</li>
+      <li><span class="check">✔</span> 본사와 현장의 거리가 장거리라서 관리가 어려운 업체</li>
     </ul>
     <div class="who-message">
       <p>"상시 고용이 부담스럽다면<br><span style="color:var(--amber);">비상근 경비지도사로 효율적으로 관리하세요.</span>"</p>
@@ -570,7 +576,7 @@
 
 <section class="mission">
   <div class="wrap">
-    <blockquote>“스마트한 경비지도사의 전문성으로, 사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
+    <blockquote>“스마트한 경비지도사의 전문성으로,<br>사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
     <cite>— 장지도사</cite>
   </div>
 </section>
@@ -614,15 +620,15 @@
       <div class="row"><span class="k">담당자</span><span>장지도사 (일반경비지도사 / CS 사업부)</span></div>
       <div class="row"><span class="k">전화</span><span>010-9942-6858</span></div>
       <div class="row"><span class="k">팩스</span><span>0504-228-6858</span></div>
-      <div class="row"><span class="k">카카오톡</span><span>카카오톡 채널 스마트 특수경비지도사</span></div>
+      <div class="row"><span class="k">카카오톡</span><span><a href="https://pf.kakao.com/_xhLMxaX/chat" target="_blank" rel="noopener" class="kakao-link">카카오톡 채널 스마트 특수경비지도사 →</a></span></div>
+      <div class="kakao-qr">
+        <img src="images/kakao-qr.jpg" alt="카카오톡 채널 추가 QR코드">
+        <p>QR코드를 스캔하면 카카오톡 채널 추가를 할 수 있어요.</p>
+      </div>
       <div class="row"><span class="k">이메일</span><span>safajang@naver.com</span></div>
       <div class="row"><span class="k">주소</span><span>48296 부산광역시 수영구 광안로35번길 18, 208호 (광안동, 부흥)</span></div>
       <div class="row"><span class="k">활동지역</span><span>부산광역시 · 경남 일부</span></div>
       <div class="row"><span class="k">상담시간</span><span>07:00 – 20:00</span></div>
-      <div class="card-preview">
-        <img src="images/business-card-front.jpg" alt="명함 앞면">
-        <img src="images/business-card-back.png" alt="명함 뒷면">
-      </div>
     </div>
     <!--
       Formspree 연동 완료: Form ID xaeyyyry로 연결되어 있습니다.
@@ -641,6 +647,12 @@
       <input type="hidden" name="_subject" value="[홈페이지 문의] 상담 요청이 도착했습니다">
       <button type="submit" class="cta-btn">상담 요청 보내기</button>
     </form>
+  </div>
+  <div class="wrap">
+    <div class="card-preview">
+      <img src="images/business-card-front.jpg" alt="명함 앞면">
+      <img src="images/business-card-back.png" alt="명함 뒷면">
+    </div>
   </div>
 </section>
 
