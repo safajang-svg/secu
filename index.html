@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>장지도사 | 부산·경남 현장형·스마트 경비지도사</title>
+<title>짱지도사 | 부산·경남 현장형·스마트 경비지도사</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -35,7 +35,8 @@
 
   header.site{position:sticky; top:0; z-index:50; background:rgba(236,238,233,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--paper-line);}
   .nav-row{display:flex; align-items:center; justify-content:space-between; padding:16px 0; position:relative;}
-  .brand{display:flex; align-items:baseline; gap:8px; font-weight:800; font-size:1.05rem; background:var(--navy-950); color:var(--paper); padding:8px 16px; border-radius:4px;}
+  .brand{display:flex; align-items:baseline; gap:8px; font-weight:800; font-size:1.05rem; background:var(--navy-950); color:var(--paper); padding:8px 16px; border-radius:4px; text-decoration:none;}
+  .brand span{text-decoration:none;}
   .brand .tag{font-size:0.62rem; font-family:'IBM Plex Mono', monospace; color:var(--amber-dim); border:1px solid var(--amber-dim); padding:2px 6px; border-radius:2px; letter-spacing:0.05em;}
   nav.links{display:flex; gap:15px; font-size:0.82rem; flex-wrap:wrap;}
   nav.links a{text-decoration:none; color:var(--navy-800); white-space:nowrap;}
@@ -51,7 +52,7 @@
   }
 
   .hero{background:var(--navy-950); color:var(--paper); position:relative; overflow:hidden; padding:88px 0 96px;}
-  .hero-photo{position:absolute; inset:0; background:url('images/field-patrol.jpg') center 20%/cover no-repeat; opacity:0.34; filter:grayscale(35%) contrast(1.05);}
+  .hero-photo{position:absolute; inset:0; background:none; opacity:0.34; filter:grayscale(35%) contrast(1.05);}
   .hero::before{content:""; position:absolute; inset:0; background:
       linear-gradient(180deg, rgba(15,23,32,0.55) 0%, rgba(15,23,32,0.88) 68%, var(--navy-950) 100%),
       repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 96px),
@@ -161,8 +162,8 @@
   .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
   .contact-info .row{display:flex; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.12); font-size:0.98rem;}
   .contact-info .row .k{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--amber); width:96px; flex-shrink:0; padding-top:2px;}
-  .card-preview{display:flex; gap:24px; flex-wrap:wrap; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.12); justify-content:center;}
-  .card-preview img{width:420px; max-width:100%; border-radius:6px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
+  .card-preview{display:flex; gap:28px; flex-wrap:wrap; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.12); justify-content:center;}
+  .card-preview img{width:560px; max-width:100%; border-radius:10px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
   .kakao-link{color:var(--amber); text-decoration:underline; text-underline-offset:3px;}
   .kakao-link:hover{color:#fff;}
   .kakao-qr{margin:20px 0 8px; padding:20px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:6px; display:flex; align-items:center; gap:20px;}
@@ -174,6 +175,8 @@
   form.contact-form textarea{resize:vertical; min-height:220px; flex-grow:1;}
   form.contact-form label{font-size:0.82rem; color:#B7BEC4; margin-bottom:-6px;}
   form.contact-form button{margin-top:6px; align-self:flex-start; box-shadow:0 10px 26px rgba(0,0,0,0.55);}
+  .submit-btn{background:var(--amber); color:var(--navy-950);}
+  .submit-btn:hover{background:#F2C66C; color:var(--navy-950);}
   @media (max-width:860px){ form.contact-form{margin-top:0;} }
 
   footer.site{background:var(--navy-950); color:#7A8590; font-size:0.8rem; padding:24px 0 40px; border-top:1px solid rgba(255,255,255,0.1);}
@@ -253,13 +256,271 @@
     .contact-grid{grid-template-columns:1fr; gap:40px;}
     .service-row{grid-template-columns:1fr; gap:8px;}
   }
+
+  /* ================= MODERN VISUAL REFRESH ================= */
+  :root{
+    --navy-950:#071521;
+    --navy-900:#0B1E2D;
+    --navy-800:#153248;
+    --paper:#F4F6F3;
+    --paper-line:#DCE2DE;
+    --ink:#101820;
+    --amber:#E8B34F;
+    --amber-dim:#B88A32;
+    --seal:#B64231;
+    --green-live:#55C98A;
+    --muted:#61707B;
+    --card:#FFFFFF;
+  }
+  body{
+    background:
+      radial-gradient(circle at 12% 8%, rgba(232,179,79,.08), transparent 28%),
+      var(--paper);
+    color:var(--ink);
+  }
+  .wrap{max-width:1180px;padding:0 28px;}
+  header.site{
+    background:rgba(244,246,243,.82);
+    border-bottom:1px solid rgba(16,24,32,.10);
+    box-shadow:0 8px 30px rgba(7,21,33,.05);
+    backdrop-filter:blur(16px);
+  }
+  .nav-row{padding:13px 0;min-height:70px;}
+  .brand{
+    align-items:center;gap:10px;padding:7px 12px 7px 8px;
+    border-radius:10px;background:var(--navy-950);
+    box-shadow:0 8px 22px rgba(7,21,33,.16);
+  }
+  .brand-mark{width:38px;height:38px;object-fit:contain;border-radius:7px;background:#fff;padding:2px;}
+  .brand .tag{color:var(--amber);border-color:rgba(232,179,79,.55);font-size:.58rem;}
+  nav.links{gap:20px;font-weight:600;}
+  nav.links a{color:#34434E;position:relative;padding:5px 0;}
+  nav.links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:2px;
+    background:var(--amber);transition:width .2s ease;
+  }
+  nav.links a:hover::after{width:100%;}
+  .cta-btn{
+    border-radius:9px;padding:12px 19px;
+    box-shadow:0 8px 20px rgba(16,24,32,.12);
+  }
+  .cta-btn:hover{background:var(--amber);color:var(--navy-950);transform:translateY(-2px);}
+  .cta-btn.ghost{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.28);}
+  .hero{
+    min-height:720px;padding:70px 0 70px;
+    background:
+      radial-gradient(circle at 78% 42%, rgba(232,179,79,.15), transparent 26%),
+      linear-gradient(135deg,#06131E 0%,#0B1E2D 58%,#102B40 100%);
+  }
+  .hero::before{
+    background:
+      linear-gradient(90deg,rgba(7,21,33,.96) 0%,rgba(7,21,33,.86) 48%,rgba(7,21,33,.40) 100%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 90px),
+      repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 90px);
+  }
+  .hero-grid{grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;}
+  .hero-text{padding:20px 0;}
+  .status-badge{
+    border-radius:999px;padding:9px 15px;margin-bottom:26px;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.15);
+  }
+  .hero h1{
+    font-size:clamp(2.25rem,5vw,4.25rem);line-height:1.18;
+    letter-spacing:-.055em;max-width:720px;
+  }
+  .hero h1 .accent{color:var(--amber);}
+  .hero p.lede{font-size:1.05rem;line-height:1.9;color:#B9C5CC;max-width:690px;}
+  .hero-ctas{margin-top:32px;}
+  .hero-ctas .cta-btn:first-child{background:var(--amber);color:var(--navy-950);}
+  .hero-ctas .cta-btn:first-child:hover{background:#F2C66C;}
+  .hero .cta-btn.ghost{color:#FFFFFF; border-color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.08);}
+  .hero .cta-btn.ghost:hover{background:var(--amber); color:var(--navy-950); border-color:var(--amber);}
+  .hero-visual{
+    position:relative;min-height:610px;
+    display:flex;justify-content:center;align-items:flex-end;
+  }
+  .hero-visual::before{
+    content:"";position:absolute;width:470px;height:470px;border-radius:50%;
+    background:radial-gradient(circle,rgba(232,179,79,.24),rgba(232,179,79,.03) 55%,transparent 70%);
+    filter:blur(2px);bottom:55px;
+  }
+  .hero-visual::after{
+    content:"FIELD • SMART • SECURITY";
+    position:absolute;right:2%;bottom:48px;
+    color:rgba(255,255,255,.22);font:600 .66rem/1 'IBM Plex Mono',monospace;
+    letter-spacing:.16em;writing-mode:vertical-rl;
+  }
+  .hero-visual img{
+    position:relative;z-index:2;max-height:650px;
+    filter:drop-shadow(0 28px 36px rgba(0,0,0,.48));
+    transform:translateY(8px);
+  }
+  .hero-meta{margin-top:42px;gap:0;max-width:650px;}
+  .hero-meta .item{padding-right:28px;margin-right:28px;border-right:1px solid rgba(255,255,255,.12);}
+  .hero-meta .item:last-child{border-right:0;}
+  .hero-meta .item .num{font-size:1.08rem;}
+  .hero-meta .item{display:flex; flex-direction:column; align-items:center; text-align:center;}
+  .hero-meta .item .trust-chip{
+    margin-top:14px; display:inline-block; color:#B9C5CC; font-size:.76rem;
+    border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.045);
+    border-radius:999px; padding:6px 12px;
+  }
+  section{padding:100px 0;}
+  .section-head{margin-bottom:48px;}
+  .eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;color:var(--seal);}
+  .section-head h2{font-size:clamp(2rem,3.5vw,2.7rem);letter-spacing:-.045em;}
+  .section-head p{color:var(--muted);line-height:1.8;}
+  #who{position:relative;}
+  .who-list{
+    max-width:none;grid-template-columns:repeat(3,1fr);gap:12px;
+    background:none;border:0;
+  }
+  .who-list li{
+    border:1px solid var(--paper-line);border-radius:14px;
+    padding:22px;background:#fff;box-shadow:0 8px 26px rgba(7,21,33,.04);
+  }
+  .who-list .check{color:var(--amber-dim);}
+  .who-message{
+    margin-top:18px;border-radius:16px;padding:38px 30px;
+    background:linear-gradient(135deg,var(--navy-950),#153248);
+    box-shadow:0 18px 40px rgba(7,21,33,.12);
+  }
+  .credential{
+    grid-template-columns:1fr 350px;border:0;border-radius:18px;overflow:hidden;
+    box-shadow:0 18px 50px rgba(7,21,33,.09);
+  }
+  .credential-body{padding:48px;}
+  .credential-list li{padding:15px 0;}
+  .credential-list .k{color:var(--amber-dim);font-weight:600;}
+  .seal-panel{
+    background:
+      radial-gradient(circle at 50% 40%,rgba(232,179,79,.16),transparent 34%),
+      linear-gradient(145deg,#071521,#102B40);
+    min-height:100%;
+  }
+  .brand-logo{width:260px;filter:drop-shadow(0 16px 26px rgba(0,0,0,.35));}
+  /* Field cards replace missing external photo assets while keeping the same content. */
+  .field-cards{
+    display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:14px;
+  }
+  .field-card{
+    position:relative;min-height:230px;padding:30px;border:1px solid var(--paper-line);
+    border-radius:16px;background:#fff;overflow:hidden;
+    box-shadow:0 10px 30px rgba(7,21,33,.05);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .field-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(7,21,33,.10);}
+  .field-card-main{
+    grid-row:span 2;min-height:474px;color:var(--paper);
+    display:flex;flex-direction:column;justify-content:space-between;
+    background:
+      radial-gradient(circle at 80% 20%,rgba(232,179,79,.24),transparent 25%),
+      linear-gradient(145deg,#071521,#153248);
+  }
+  .field-card-main p{color:#B9C5CC;}
+  .field-card-main strong{
+    align-self:flex-end;color:var(--amber);font:600 .72rem/1 'IBM Plex Mono',monospace;letter-spacing:.12em;
+  }
+  .field-no{font:600 .72rem 'IBM Plex Mono',monospace;color:var(--amber-dim);letter-spacing:.08em;}
+  .field-card-main .field-no{color:var(--amber);}
+  .field-label{display:block;margin:12px 0 8px;font:600 .67rem 'IBM Plex Mono',monospace;letter-spacing:.13em;color:var(--seal);}
+  .field-card-main .field-label{color:var(--amber);}
+  .field-card h3{font-size:1.3rem;margin-bottom:12px;}
+  .field-card p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.75;}
+  .cap-grid,.pricing-grid{gap:14px;background:none;border:0;}
+  .cap-card,.price-card{
+    border:1px solid var(--paper-line);border-radius:16px;padding:32px 28px;
+    box-shadow:0 8px 26px rgba(7,21,33,.04);
+  }
+  .cap-card{background:#fff;}
+  .cap-card .code,.price-card .tier{color:var(--amber-dim);font-weight:700;}
+  .cap-card li{padding:9px 0;}
+  .par-table,.service-log{border-top:2px solid var(--navy-950);}
+  .par-row,.service-row{padding:28px 0;}
+  .par-row .par-k,.service-row .code{color:var(--seal);font-weight:700;}
+  .service-row h3{font-size:1.2rem;}
+  .timeline{gap:14px;}
+  .timeline::before{top:22px;background:#CCD5D0;}
+  .step{padding:58px 12px 0 0;}
+  .step .step-num{background:var(--navy-950);box-shadow:0 0 0 6px var(--paper);}
+  .price-card.highlight{
+    border-color:var(--navy-950);
+    box-shadow:0 18px 40px rgba(7,21,33,.18);
+  }
+  .faq-item summary{padding:24px 0;}
+  .faq-item .faq-a{line-height:1.8;}
+  .mission{
+    background:
+      radial-gradient(circle at 50% 0%,rgba(232,179,79,.14),transparent 36%),
+      var(--navy-950);
+  }
+  .contact{
+    background:linear-gradient(145deg,#06131E,#102B40);
+  }
+  .contact-grid{gap:80px;}
+  .contact-info .row{border-bottom-color:rgba(255,255,255,.09);}
+  .contact-info .row .k{color:var(--amber);}
+  form.contact-form input,form.contact-form textarea{
+    border-radius:10px;background:rgba(255,255,255,.055);
+    border-color:rgba(255,255,255,.15);
+  }
+  form.contact-form input:focus,form.contact-form textarea:focus{
+    outline:2px solid rgba(232,179,79,.55);outline-offset:1px;
+  }
+  .kakao-qr{border-radius:12px;background:rgba(255,255,255,.035);}
+  footer.site{background:#05111A;}
+  .admin-toggle{border-radius:9px;}
+  .modal-box{border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.25);}
+  @media (max-width:960px){
+    nav.links{gap:12px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1;min-height:430px;}
+    .hero-visual img{max-height:450px;}
+    .hero-visual::before{width:340px;height:340px;bottom:20px;}
+    .who-list{grid-template-columns:1fr 1fr;}
+    .field-cards{grid-template-columns:1fr 1fr;}
+    .field-card-main{grid-row:auto;min-height:340px;}
+  }
+  @media (max-width:700px){
+    .wrap{padding:0 20px;}
+    .nav-row{min-height:62px;}
+    .brand{font-size:.92rem;}
+    .brand-mark{width:34px;height:34px;}
+    .hero{padding:48px 0 58px;}
+    .hero-visual{min-height:330px;}
+    .hero-visual img{max-height:350px;}
+    .hero h1{font-size:clamp(2rem,10vw,3rem);}
+    .hero p.lede{font-size:.96rem;}
+    .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .hero-meta .item{border-right:0;margin:0;padding:0;}
+    .who-list,.field-cards{grid-template-columns:1fr;}
+    .credential{grid-template-columns:1fr;}
+    .credential-body{padding:32px 24px;}
+    .seal-panel{min-height:280px;}
+    .field-card-main{min-height:300px;}
+    .contact-grid{gap:40px;}
+  }
+
+
+  .digital-card{
+    width:100%;max-width:560px;min-height:170px;padding:28px 32px;
+    border:1px solid rgba(255,255,255,.16);border-radius:16px;
+    background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+    box-shadow:0 18px 42px rgba(0,0,0,.25);display:grid;
+    grid-template-columns:1fr auto;gap:8px 20px;align-items:end;
+  }
+  .digital-card .dc-label{grid-column:1/-1;font:600 .62rem 'IBM Plex Mono',monospace;color:var(--amber);letter-spacing:.14em;}
+  .digital-card strong{font:800 1.7rem 'Gothic A1',sans-serif;color:#fff;}
+  .digital-card span:not(.dc-label){color:#AAB8C0;font-size:.78rem;}
+  .digital-card b{font:700 1rem 'IBM Plex Mono',monospace;color:#fff;}
+
 </style>
 </head>
-<body>
+<body id="top">
 
 <header class="site">
   <div class="wrap nav-row">
-    <div class="brand">장지도사 <span class="tag">일반·특수 · 비상근</span></div>
+    <a class="brand" href="#top" aria-label="짱지도사 홈"><img src="logo.png" alt="" class="brand-mark"><span>짱지도사</span><span class="tag">비상근 특수·일반 경비지도사</span></a>
     <nav class="links">
       <a href="#credential">소개</a>
       <a href="#who">이런 업체</a>
@@ -291,9 +552,9 @@
           상담 가능 · 부산·경남 권역
           <span class="clock" id="liveClock">--:--:--</span>
         </div>
-        <h1>자격증만 있는 경비지도사가 아닙니다.<br><span class="accent">현장을 뛰고,<br>AI로 일하는 스마트한<br>경비지도사입니다.</span></h1>
+        <h1>현장을 아는 경비지도사.<br><span class="accent">점검은 꼼꼼하게,<br>업무는 스마트하게.</span></h1>
         <p class="lede">
-          부산·경남 경비업체의 현장관리와 경비지도사 업무를 지원하는 현장형 경비지도사 장지도사입니다.
+          부산·경남 경비업체의 현장관리와 경비지도사 업무를 지원하는 현장형 경비지도사 짱지도사입니다.
           일반경비지도사이자 특수경비원 신임교육을 수료했고, 실제 경비 현장 근무 경험과
           능숙한 컴퓨터·AI 활용 능력을 바탕으로 배치신고부터 순회점검·직무교육·보고서 작성까지 빠르고 정확하게 지원합니다.
         </p>
@@ -302,13 +563,13 @@
           <a href="#field" class="cta-btn ghost">현장 스냅 보기</a>
         </div>
         <div class="hero-meta">
-          <div class="item"><div class="num">일반·특수</div><div class="label">경비지도사 자격 (제42777호)</div></div>
-          <div class="item"><div class="num">AI 활용</div><div class="label">스마트 업무 처리</div></div>
-          <div class="item"><div class="num">부산·경남</div><div class="label">활동 가능 권역</div></div>
+          <div class="item"><div class="num">일반·특수</div><div class="label">경비지도사 자격 (제42777호)</div><div class="trust-chip">✓ 현장 실무</div></div>
+          <div class="item"><div class="num">AI 활용</div><div class="label">스마트 업무 처리</div><div class="trust-chip">✓ 법정업무 지원</div></div>
+          <div class="item"><div class="num">부산·경남</div><div class="label">활동 가능 권역</div><div class="trust-chip">✓ 스마트 리포트</div></div>
         </div>
       </div>
       <div class="hero-visual">
-        <img src="images/character-fullbody.png" alt="경비지도사 캐릭터 일러스트">
+        <img src="character-fullbody.png" alt="경비지도사 캐릭터 일러스트">
       </div>
     </div>
   </div>
@@ -355,7 +616,7 @@
         </ul>
       </div>
       <div class="seal-panel">
-        <img src="images/logo.png" alt="GENERAL SECURITY INSTRUCTOR 로고" class="brand-logo">
+        <img src="logo.png" alt="GENERAL SECURITY INSTRUCTOR 로고" class="brand-logo">
       </div>
     </div>
   </div>
@@ -370,24 +631,24 @@
     </div>
     <div class="gallery-grid">
       <div class="gallery-item tall">
-        <img src="images/corridor-patrol.jpg" alt="사업장 복도를 순찰하는 모습" loading="lazy">
-        <div class="cap">사업장 순찰</div>
+        <img src="images/field-01-patrol.jpg" alt="현장 순회점검">
+        <span class="cap">현장 순회점검</span>
       </div>
       <div class="gallery-item">
-        <img src="images/training-1.jpg" alt="법정 직무교육 강의 진행 모습" loading="lazy">
-        <div class="cap">법정 직무교육 진행</div>
+        <img src="images/field-02-training.jpg" alt="직무교육">
+        <span class="cap">직무교육</span>
       </div>
       <div class="gallery-item">
-        <img src="images/control-room.jpg" alt="CCTV 관제 상황을 확인하는 모습" loading="lazy">
-        <div class="cap">관제 상황 확인</div>
+        <img src="images/field-03-control.jpg" alt="관제·CCTV 점검">
+        <span class="cap">관제·CCTV 점검</span>
       </div>
       <div class="gallery-item">
-        <img src="images/training-2.jpg" alt="신변보호 실무 교육 장면" loading="lazy">
-        <div class="cap">신변보호 실무 교육</div>
+        <img src="images/field-04-safety.jpg" alt="시설·안전 점검">
+        <span class="cap">시설·안전 점검</span>
       </div>
       <div class="gallery-item">
-        <img src="images/inspection.jpg" alt="현장 시설 점검 모습" loading="lazy">
-        <div class="cap">현장 시설 점검</div>
+        <img src="images/field-05-report.jpg" alt="점검 결과 보고">
+        <span class="cap">점검 결과 보고</span>
       </div>
     </div>
   </div>
@@ -578,7 +839,7 @@
 <section class="mission">
   <div class="wrap">
     <blockquote>“스마트한 경비지도사의 전문성으로,<br>사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
-    <cite>— 장지도사</cite>
+    <cite>— 짱지도사</cite>
   </div>
 </section>
 
@@ -617,14 +878,14 @@
   <div class="wrap contact-grid">
     <div class="contact-info">
       <span class="eyebrow" style="color:var(--amber);">07 · CONTACT</span>
-      <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:24px;">지금 상담을 시작하세요</h2>
-      <div class="row"><span class="k">담당자</span><span>장지도사 (일반경비지도사 / CS 사업부)</span></div>
+      <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:10px;">지금 상담을 시작하세요</h2><p style="margin:0 0 24px;color:#9FAEB7;">현장 상황을 알려주시면 필요한 업무 범위부터 함께 정리해드립니다.</p>
+      <div class="row"><span class="k">담당자</span><span>짱지도사 (일반경비지도사 / CS 사업부)</span></div>
       <div class="row"><span class="k">전화</span><span>010-9942-6858</span></div>
       <div class="row"><span class="k">팩스</span><span>0504-228-6858</span></div>
       <div class="row"><span class="k">카카오톡</span><span><a href="https://pf.kakao.com/_xhLMxaX/chat" target="_blank" rel="noopener" class="kakao-link">카카오톡 채널 스마트 특수경비지도사 →</a></span></div>
       <div class="kakao-qr">
-        <img src="images/kakao-qr.jpg" alt="카카오톡 채널 추가 QR코드">
-        <p>QR코드를 스캔하면 카카오톡 채널 추가를 할 수 있어요.</p>
+        <img src="images/kakao-qr.png" alt="스마트 특수경비지도사 카카오톡 채널 QR코드">
+        <p><strong style="color:#fff;">스마트 특수경비지도사</strong><br>QR코드를 스캔하면 카카오톡 채널 추가를 할 수 있어요.</p>
       </div>
       <div class="row"><span class="k">이메일</span><span>safajang@naver.com</span></div>
       <div class="row"><span class="k">주소</span><span>48296 부산광역시 수영구 광안로35번길 18, 208호 (광안동, 부흥)</span></div>
@@ -646,19 +907,19 @@
       <label for="f-msg">문의 내용</label>
       <textarea id="f-msg" name="message" placeholder="현재 경비 인원, 애로사항 등을 적어주세요."></textarea>
       <input type="hidden" name="_subject" value="[홈페이지 문의] 상담 요청이 도착했습니다">
-      <button type="submit" class="cta-btn">상담 요청 보내기</button>
+      <button type="submit" class="cta-btn submit-btn">상담 요청 보내기</button>
     </form>
   </div>
   <div class="wrap">
     <div class="card-preview">
-      <img src="images/business-card-front.jpg" alt="명함 앞면">
-      <img src="images/business-card-back.png" alt="명함 뒷면">
+      <img src="images/business-card-front.jpg" alt="짱지도사 명함 앞면">
+      <img src="images/business-card-back.png" alt="짱지도사 명함 뒷면">
     </div>
   </div>
 </section>
 
 <footer class="site">
-  <div class="wrap">© 2026 장지도사. 경비업법에 따른 지도·감독, 직무교육, 리스크 자문 서비스.</div>
+  <div class="wrap">© 2026 짱지도사. 경비업법에 따른 지도·감독, 직무교육, 리스크 자문 서비스.</div>
 </footer>
 
 <div class="modal-overlay" id="postModal">
@@ -693,17 +954,18 @@
   tick();
   setInterval(tick, 1000);
 
-  /* ===== 관리자 게시판 (localStorage 기반) =====
-     주의: 이 게시판은 서버가 없는 정적 페이지용으로,
-     글 데이터는 "이 브라우저"에만 저장됩니다.
-     관리자가 이 브라우저에서 올린 글은 같은 브라우저에서만 보이며,
-     다른 방문자·다른 기기에는 표시되지 않습니다.
-     여러 방문자에게 공통으로 보이는 게시판이 필요하면
-     별도의 백엔드(구글시트 연동, 헤드리스 CMS 등)가 필요합니다. */
+  /* ===== 관리자 게시판 (구글시트 연동) =====
+     이 게시판은 구글 시트를 백엔드로 사용합니다.
+     아래 SHEETS_API_URL에 배포한 구글 앱스 스크립트(Web App) 주소를 넣어야
+     모든 방문자에게 같은 글이 보이고, 브라우저를 껐다 켜거나 다른 기기로 봐도 유지됩니다.
+     설정 방법: Google Sheets에서 확장 프로그램 > Apps Script 에 안내받은 코드를 붙여넣고
+     '배포 > 웹 앱'으로 배포한 뒤(액세스 권한: 전체) 생성된 URL을 아래에 붙여넣으세요. */
+
+  const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbxy_5V0vp4X2-GKeB_gPg3qJjO_xsyiCaHBz0bEfXx-tkxYMwLNphXW5tyIn3EylT-pkg/exec'; // TODO: 배포한 구글 앱스 스크립트 웹 앱 URL을 여기에 붙여넣으세요
 
   const ADMIN_PASSWORD = 'jang2026'; // TODO: 실제 운영 전 반드시 변경하세요
 
-  const DEFAULT_POSTS = {
+  const boardCache = {
     culture: [
       {id:'c1', title:'신임·직무교육 24시간 12과목 커리큘럼', date:'2026-03-02', content:'아파트 단지 특화 신임/직무교육 커리큘럼 예시입니다. 시설 안내, 근무요령, 화재예방, 응급처치 등 12개 과목으로 구성됩니다.', link:''},
       {id:'c2', title:'여름철 안전교육 자료', date:'2026-06-10', content:'폭염 대비 수칙과 여름철 방범 포인트를 정리한 교육자료 예시입니다.', link:''},
@@ -720,21 +982,43 @@
     ]
   };
 
-  function loadBoard(key){
-    const raw = localStorage.getItem('board_' + key + '_v1');
-    if(raw){
-      try{ return JSON.parse(raw); }catch(e){ /* fall through */ }
+  function apiReady(){ return !!SHEETS_API_URL; }
+
+  async function fetchBoard(key){
+    if(!apiReady()) return boardCache[key] || [];
+    try{
+      const res = await fetch(`${SHEETS_API_URL}?action=list&board=${key}`);
+      const data = await res.json();
+      if(data.ok) boardCache[key] = data.posts || [];
+    }catch(e){
+      console.error('게시판을 불러오지 못했습니다', e);
     }
-    return DEFAULT_POSTS[key] ? DEFAULT_POSTS[key].slice() : [];
-  }
-  function saveBoard(key, posts){
-    localStorage.setItem('board_' + key + '_v1', JSON.stringify(posts));
+    return boardCache[key] || [];
   }
 
-  function renderBoard(key){
+  async function apiRequest(action, payload){
+    if(!apiReady()){
+      alert('아직 구글시트 연동 주소(SHEETS_API_URL)가 설정되지 않았습니다. 설정 전까지는 이 브라우저에서만 임시로 보입니다.');
+      return false;
+    }
+    try{
+      await fetch(SHEETS_API_URL, {
+        method:'POST',
+        headers:{ 'Content-Type':'text/plain;charset=utf-8' }, // 프리플라이트(CORS) 회피용
+        body: JSON.stringify({ action, ...payload })
+      });
+      return true;
+    }catch(e){
+      alert('저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      return false;
+    }
+  }
+
+  async function renderBoard(key){
     const container = document.getElementById('board-' + key);
     if(!container) return;
-    const posts = loadBoard(key).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+    container.innerHTML = '<div class="board-empty">불러오는 중...</div>';
+    const posts = (await fetchBoard(key)).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||''));
     container.innerHTML = '';
     if(posts.length === 0){
       const empty = document.createElement('div');
@@ -774,14 +1058,13 @@
   }
   function escapeAttr(str){ return escapeHtml(str); }
 
-  function deletePost(key, id){
+  async function deletePost(key, id){
     if(!confirm('이 글을 삭제할까요?')) return;
-    const posts = loadBoard(key).filter(p => p.id !== id);
-    saveBoard(key, posts);
-    renderBoard(key);
+    const ok = await apiRequest('delete', { board:key, id });
+    if(ok) renderBoard(key);
   }
 
-  let modalState = { board:null, id:null, image:null };
+  let modalState = { board:null, id:null, image:null, date:null };
   const modal = document.getElementById('postModal');
   const imageInput = document.getElementById('m-image');
   const imagePreview = document.getElementById('m-image-preview');
@@ -808,8 +1091,8 @@
   imageInput.addEventListener('change', () => {
     const file = imageInput.files[0];
     if(!file) return;
-    if(file.size > 1.5 * 1024 * 1024){
-      alert('사진 용량이 너무 큽니다 (1.5MB 이하로 올려주세요). 이 게시판은 브라우저에 저장되는 방식이라 큰 파일은 저장이 안 될 수 있어요.');
+    if(file.size > 30 * 1024){
+      alert('사진 용량이 너무 큽니다 (30KB 이하로 올려주세요). 구글시트 셀 용량 제한 때문에 작은 사진만 첨부할 수 있어요.');
       imageInput.value = '';
       return;
     }
@@ -821,20 +1104,21 @@
     reader.readAsDataURL(file);
   });
 
-  function openModal(boardKey, postId){
-    modalState = { board: boardKey, id: postId || null, image: null };
+  async function openModal(boardKey, postId){
+    modalState = { board: boardKey, id: postId || null, image: null, date: null };
     const titleEl = document.getElementById('modalTitle');
     const tInput = document.getElementById('m-title');
     const cInput = document.getElementById('m-content');
     const lInput = document.getElementById('m-link');
     imageInput.value = '';
     if(postId){
-      const post = loadBoard(boardKey).find(p => p.id === postId);
+      const post = (await fetchBoard(boardKey)).find(p => p.id === postId);
       titleEl.textContent = '글 수정';
       tInput.value = post ? post.title : '';
       cInput.value = post ? post.content : '';
       lInput.value = post ? (post.link || '') : '';
       modalState.image = post && post.image ? post.image : null;
+      modalState.date = post ? post.date : null;
     } else {
       titleEl.textContent = '글쓰기';
       tInput.value = ''; cInput.value = ''; lInput.value = '';
@@ -847,30 +1131,26 @@
   document.getElementById('modalCancel').addEventListener('click', closeModal);
   document.getElementById('postModal').addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
 
-  document.getElementById('modalSave').addEventListener('click', () => {
+  document.getElementById('modalSave').addEventListener('click', async () => {
     const title = document.getElementById('m-title').value.trim();
     const content = document.getElementById('m-content').value.trim();
     const link = document.getElementById('m-link').value.trim();
     const image = modalState.image || null;
     if(!title || !content){ alert('제목과 내용을 입력해주세요.'); return; }
     const key = modalState.board;
-    let posts = loadBoard(key);
-    try {
-      if(modalState.id){
-        posts = posts.map(p => p.id === modalState.id ? {...p, title, content, link, image} : p);
-      } else {
-        const today = new Date().toISOString().slice(0,10);
-        posts.push({ id: 'p' + Date.now(), title, content, link, image, date: today });
-      }
-      saveBoard(key, posts);
-    } catch(e){
-      alert('저장 공간이 부족합니다. 사진 용량을 줄이거나 오래된 글의 사진을 정리해주세요.');
-      return;
+    const today = new Date().toISOString().slice(0,10);
+    const date = modalState.id ? (modalState.date || today) : today;
+    let ok;
+    if(modalState.id){
+      ok = await apiRequest('update', { board:key, post:{ id: modalState.id, title, content, link, image, date } });
+    } else {
+      ok = await apiRequest('create', { board:key, post:{ id: 'p' + Date.now(), title, content, link, image, date } });
     }
-    renderBoard(key);
-    closeModal();
+    if(ok){
+      renderBoard(key);
+      closeModal();
+    }
   });
-
 
   document.querySelectorAll('.write-btn').forEach(btn => {
     btn.addEventListener('click', () => openModal(btn.dataset.board, null));
