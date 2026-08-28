@@ -165,10 +165,10 @@
   .card-preview img{width:420px; max-width:100%; border-radius:6px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
   .kakao-link{color:var(--amber); text-decoration:underline; text-underline-offset:3px;}
   .kakao-link:hover{color:#fff;}
-  .kakao-qr{margin:8px 0 16px 112px; display:flex; align-items:center; gap:14px;}
-  .kakao-qr img{width:96px; height:96px; border-radius:6px; background:#fff; padding:4px;}
-  .kakao-qr p{font-size:0.82rem; color:#B7BEC4; margin:0; max-width:200px;}
-  @media (max-width:500px){ .kakao-qr{margin-left:0;} }
+  .kakao-qr{margin:20px 0 8px; padding:20px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:6px; display:flex; align-items:center; gap:20px;}
+  .kakao-qr img{width:220px; height:220px; border-radius:8px; background:#fff; padding:10px; flex-shrink:0;}
+  .kakao-qr p{font-size:0.9rem; color:#B7BEC4; margin:0;}
+  @media (max-width:500px){ .kakao-qr{flex-direction:column; text-align:center;} .kakao-qr img{width:200px; height:200px;} }
   form.contact-form{display:flex; flex-direction:column; gap:14px;}
   form.contact-form input, form.contact-form textarea{background:var(--navy-900); border:1px solid rgba(255,255,255,0.18); color:var(--paper); padding:13px 14px; font-family:'Noto Sans KR', sans-serif; font-size:0.95rem; border-radius:2px;}
   form.contact-form textarea{resize:vertical; min-height:100px;}
