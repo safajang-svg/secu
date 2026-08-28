@@ -162,8 +162,9 @@
   .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
   .contact-info .row{display:flex; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.12); font-size:0.98rem;}
   .contact-info .row .k{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--amber); width:96px; flex-shrink:0; padding-top:2px;}
-  .card-preview{display:flex; gap:28px; flex-wrap:wrap; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.12); justify-content:center;}
-  .card-preview img{width:560px; max-width:100%; border-radius:10px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
+  .card-preview{display:flex; flex-wrap:wrap; gap:24px; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.12); justify-content:center; align-items:flex-start;}
+  .card-preview img{flex:1 1 320px; width:auto; max-width:460px; border-radius:10px; box-shadow:0 14px 32px rgba(0,0,0,0.5);}
+  @media (max-width:760px){ .card-preview img{flex-basis:100%; max-width:480px;} }
   .kakao-link{color:var(--amber); text-decoration:underline; text-underline-offset:3px;}
   .kakao-link:hover{color:#fff;}
   .kakao-qr{margin:20px 0 8px; padding:20px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:6px; display:flex; align-items:center; gap:20px;}
@@ -630,25 +631,33 @@
       <p>강의실이 아니라 현장에서 확인한 것들입니다. 교육, 순찰, 관제, 점검까지 실제 업무 장면입니다.</p>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-item tall">
-        <img src="images/field-01-patrol.jpg" alt="현장 순회점검">
+      <div class="gallery-item">
+        <img src="images/field-patrol.jpg" alt="현장 순회점검">
         <span class="cap">현장 순회점검</span>
       </div>
       <div class="gallery-item">
-        <img src="images/field-02-training.jpg" alt="직무교육">
-        <span class="cap">직무교육</span>
+        <img src="images/corridor-patrol.jpg" alt="실내 순찰점검">
+        <span class="cap">실내 순찰점검</span>
       </div>
       <div class="gallery-item">
-        <img src="images/field-03-control.jpg" alt="관제·CCTV 점검">
-        <span class="cap">관제·CCTV 점검</span>
+        <img src="images/guard-post.jpg" alt="경비초소 근무">
+        <span class="cap">경비초소 근무</span>
       </div>
       <div class="gallery-item">
-        <img src="images/field-04-safety.jpg" alt="시설·안전 점검">
-        <span class="cap">시설·안전 점검</span>
+        <img src="images/training-1.jpg" alt="법정 직무교육 진행">
+        <span class="cap">법정 직무교육 진행</span>
       </div>
       <div class="gallery-item">
-        <img src="images/field-05-report.jpg" alt="점검 결과 보고">
-        <span class="cap">점검 결과 보고</span>
+        <img src="images/training-2.jpg" alt="신변보호 실무 교육">
+        <span class="cap">신변보호 실무 교육</span>
+      </div>
+      <div class="gallery-item">
+        <img src="images/control-room.jpg" alt="관제·CCTV 상황 확인">
+        <span class="cap">관제·CCTV 상황 확인</span>
+      </div>
+      <div class="gallery-item">
+        <img src="images/inspection.jpg" alt="현장 시설 점검">
+        <span class="cap">현장 시설 점검</span>
       </div>
     </div>
   </div>
@@ -884,7 +893,7 @@
       <div class="row"><span class="k">팩스</span><span>0504-228-6858</span></div>
       <div class="row"><span class="k">카카오톡</span><span><a href="https://pf.kakao.com/_xhLMxaX/chat" target="_blank" rel="noopener" class="kakao-link">카카오톡 채널 스마트 특수경비지도사 →</a></span></div>
       <div class="kakao-qr">
-        <img src="images/kakao-qr.png" alt="스마트 특수경비지도사 카카오톡 채널 QR코드">
+        <img src="images/kakao-qr.jpg" alt="스마트 특수경비지도사 카카오톡 채널 QR코드">
         <p><strong style="color:#fff;">스마트 특수경비지도사</strong><br>QR코드를 스캔하면 카카오톡 채널 추가를 할 수 있어요.</p>
       </div>
       <div class="row"><span class="k">이메일</span><span>safajang@naver.com</span></div>
@@ -961,9 +970,9 @@
      설정 방법: Google Sheets에서 확장 프로그램 > Apps Script 에 안내받은 코드를 붙여넣고
      '배포 > 웹 앱'으로 배포한 뒤(액세스 권한: 전체) 생성된 URL을 아래에 붙여넣으세요. */
 
-  const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbxy_5V0vp4X2-GKeB_gPg3qJjO_xsyiCaHBz0bEfXx-tkxYMwLNphXW5tyIn3EylT-pkg/exec'; // TODO: 배포한 구글 앱스 스크립트 웹 앱 URL을 여기에 붙여넣으세요
+  const SHEETS_API_URL = ''; // TODO: 배포한 구글 앱스 스크립트 웹 앱 URL을 여기에 붙여넣으세요
 
-  const ADMIN_PASSWORD = 'jang2026'; // TODO: 실제 운영 전 반드시 변경하세요
+  const ADMIN_PASSWORD = 'dbss0415@';
 
   const boardCache = {
     culture: [
