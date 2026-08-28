@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>장지도사 | 부산·경남 현장형·스마트 경비지도사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0F1720;
+    --navy-900:#16212C;
+    --navy-800:#1F2E3B;
+    --paper:#ECEEE9;
+    --paper-line:#D8DBD2;
+    --ink:#141B22;
+    --amber:#E8A33D;
+    --amber-dim:#B9832F;
+    --seal:#A93A2C;
+    --green-live:#4FAE7A;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Noto Sans KR', sans-serif; line-height:1.6;}
+  h1,h2,h3,.display{font-family:'Gothic A1', sans-serif; letter-spacing:-0.02em; margin:0;}
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+  a{color:inherit;}
+  :focus-visible{outline:3px solid var(--amber); outline-offset:2px;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+
+  header.site{position:sticky; top:0; z-index:50; background:rgba(236,238,233,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--paper-line);}
+  .nav-row{display:flex; align-items:center; justify-content:space-between; padding:16px 0;}
+  .brand{display:flex; align-items:baseline; gap:8px; font-weight:800; font-size:1.05rem;}
+  .brand .tag{font-size:0.62rem; font-family:'IBM Plex Mono', monospace; color:var(--amber-dim); border:1px solid var(--amber-dim); padding:2px 6px; border-radius:2px; letter-spacing:0.05em;}
+  nav.links{display:flex; gap:26px; font-size:0.9rem;}
+  nav.links a{text-decoration:none; color:var(--navy-800);}
+  nav.links a:hover{color:var(--seal);}
+  .cta-btn{background:var(--ink); color:var(--paper); border:none; padding:10px 18px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:2px; transition:background .15s ease, transform .15s ease;}
+  .cta-btn:hover{background:var(--seal); transform:translateY(-1px);}
+  .cta-btn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--ink);}
+  .cta-btn.ghost:hover{background:var(--ink); color:var(--paper);}
+
+  .hero{background:var(--navy-950); color:var(--paper); position:relative; overflow:hidden; padding:88px 0 96px;}
+  .hero-photo{position:absolute; inset:0; background:url('images/field-patrol.jpg') center 20%/cover no-repeat; opacity:0.34; filter:grayscale(35%) contrast(1.05);}
+  .hero::before{content:""; position:absolute; inset:0; background:
+      linear-gradient(180deg, rgba(15,23,32,0.55) 0%, rgba(15,23,32,0.88) 68%, var(--navy-950) 100%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 96px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 96px); pointer-events:none;}
+  .hero-inner{position:relative; z-index:1;}
+  .hero-grid{display:grid; grid-template-columns:1.35fr 0.9fr; gap:12px; align-items:end;}
+  .hero-visual{display:flex; justify-content:center; align-items:flex-end;}
+  .hero-visual img{max-height:480px; width:auto; filter:drop-shadow(0 22px 34px rgba(0,0,0,0.5));}
+  .status-badge{display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); padding:8px 14px; border-radius:2px; font-size:0.8rem; margin-bottom:28px;}
+  .dot-live{width:8px;height:8px;border-radius:50%; background:var(--green-live); animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,174,122,0.55);} 70%{box-shadow:0 0 0 8px rgba(79,174,122,0);} 100%{box-shadow:0 0 0 0 rgba(79,174,122,0);}}
+  .clock{color:var(--amber); margin-left:4px;}
+  .hero h1{font-size:clamp(1.2rem, 5.4vw, 3.2rem); font-weight:900; line-height:1.32; max-width:840px; word-break:keep-all;}
+  .hero h1 .accent{color:var(--amber);}
+  .hero p.lede{margin-top:22px; font-size:1.08rem; color:#C7CDD3; max-width:640px;}
+  .hero-ctas{margin-top:36px; display:flex; gap:14px; flex-wrap:wrap;}
+  .hero-meta{margin-top:56px; display:flex; gap:36px; flex-wrap:wrap; border-top:1px solid rgba(255,255,255,0.14); padding-top:24px;}
+  .hero-meta .item .num{font-family:'IBM Plex Mono', monospace; font-size:1.35rem; color:var(--amber); font-weight:600;}
+  .hero-meta .item .label{font-size:0.78rem; color:#9FA7AE; margin-top:4px;}
+
+  section{padding:88px 0;}
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--seal); letter-spacing:0.08em; margin-bottom:14px; display:block;}
+  .section-head{max-width:660px; margin-bottom:52px;}
+  .section-head h2{font-size:clamp(1.6rem, 3vw, 2.2rem); font-weight:800;}
+  .section-head p{margin-top:14px; color:#3D4750; font-size:1.02rem;}
+
+  .credential{background:#fff; border:1px solid var(--paper-line); display:grid; grid-template-columns:1fr 260px;}
+  .credential-body{padding:44px;}
+  .credential-body h3{font-size:1.3rem; font-weight:800; margin-bottom:18px;}
+  .credential-list{list-style:none; margin:0; padding:0;}
+  .credential-list li{display:flex; gap:14px; padding:13px 0; border-bottom:1px dashed var(--paper-line); font-size:0.96rem;}
+  .credential-list li:last-child{border-bottom:none;}
+  .credential-list .k{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:#7A8590; width:118px; flex-shrink:0; padding-top:2px;}
+  .seal-panel{background:var(--navy-950); display:flex; align-items:center; justify-content:center; padding:32px;}
+  .brand-logo{width:170px; height:auto;}
+
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .gallery-item{position:relative; overflow:hidden; background:var(--navy-950); aspect-ratio:4/3;}
+  .gallery-item img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s ease;}
+  .gallery-item:hover img{transform:scale(1.05);}
+  .gallery-item .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; font-size:0.8rem; color:#fff; background:linear-gradient(0deg, rgba(15,23,32,0.85), rgba(15,23,32,0));}
+  .gallery-item.tall{grid-row:span 2; aspect-ratio:auto;}
+
+  .cap-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--paper-line); border:1px solid var(--paper-line);}
+  .cap-card{background:#fff; padding:32px 28px;}
+  .cap-card .code{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--seal); margin-bottom:12px; display:block;}
+  .cap-card h3{font-size:1.08rem; font-weight:800; margin-bottom:14px;}
+  .cap-card ul{list-style:none; margin:0; padding:0; font-size:0.9rem; color:#3D4750;}
+  .cap-card li{padding:6px 0; border-bottom:1px dashed var(--paper-line);}
+  .cap-card li:last-child{border-bottom:none;}
+
+  .par-table{border-top:1px solid var(--ink);}
+  .par-row{display:grid; grid-template-columns:140px 1fr; gap:28px; padding:26px 0; border-bottom:1px solid var(--paper-line);}
+  .par-row .par-k{font-family:'IBM Plex Mono', monospace; font-size:0.85rem; color:var(--seal); padding-top:2px;}
+  .par-row p{margin:0; color:#3D4750; max-width:700px;}
+
+  .service-log{border-top:1px solid var(--ink);}
+  .service-row{display:grid; grid-template-columns:120px 1fr; gap:28px; padding:30px 0; border-bottom:1px solid var(--paper-line);}
+  .service-row .code{font-family:'IBM Plex Mono', monospace; font-size:0.85rem; color:var(--seal); padding-top:4px;}
+  .service-row h3{font-size:1.12rem; font-weight:700; margin-bottom:8px;}
+  .service-row p{color:#3D4750; margin:0; max-width:640px;}
+
+  .timeline{display:grid; grid-template-columns:repeat(5,1fr); position:relative;}
+  .timeline::before{content:""; position:absolute; top:22px; left:0; right:0; height:1px; background:var(--paper-line);}
+  .step{position:relative; padding-top:56px; padding-right:16px;}
+  .step .step-num{position:absolute; top:0; left:0; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace; font-size:0.9rem; font-weight:600; z-index:1;}
+  .step h4{font-size:1rem; font-weight:700; margin-bottom:8px;}
+  .step p{font-size:0.9rem; color:#4A535C; margin:0;}
+
+  .pricing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--paper-line); border:1px solid var(--paper-line);}
+  .price-card{background:var(--paper); padding:36px 30px;}
+  .price-card.highlight{background:var(--navy-950); color:var(--paper);}
+  .price-card .tier{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--seal); margin-bottom:10px; display:block;}
+  .price-card.highlight .tier{color:var(--amber);}
+  .price-card h3{font-size:1.22rem; font-weight:800; margin-bottom:6px;}
+  .price-card .desc{font-size:0.86rem; color:#5A636C; margin-bottom:22px;}
+  .price-card.highlight .desc{color:#B7BEC4;}
+  .price-card ul{list-style:none; margin:0 0 26px; padding:0; font-size:0.9rem;}
+  .price-card li{padding:8px 0; border-bottom:1px dashed var(--paper-line);}
+  .price-card.highlight li{border-bottom:1px dashed rgba(255,255,255,0.15);}
+  .price-card li:last-child{border-bottom:none;}
+
+  .faq-item{border-bottom:1px solid var(--paper-line);}
+  .faq-item summary{cursor:pointer; padding:22px 0; font-weight:700; font-size:1rem; list-style:none; display:flex; justify-content:space-between; align-items:center;}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+"; font-family:'IBM Plex Mono', monospace; font-size:1.3rem; color:var(--seal); transition:transform .2s ease;}
+  .faq-item[open] summary::after{transform:rotate(45deg);}
+  .faq-item .faq-a{padding-bottom:22px; color:#3D4750; max-width:700px;}
+
+  .mission{background:var(--navy-950); color:var(--paper); text-align:center; padding:80px 0;}
+  .mission blockquote{font-family:'Gothic A1', sans-serif; font-size:clamp(1.3rem,3vw,1.9rem); font-weight:800; max-width:760px; margin:0 auto 20px; line-height:1.5;}
+  .mission cite{font-style:normal; color:var(--amber); font-size:0.9rem;}
+
+  .contact{background:var(--navy-950); color:var(--paper);}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  .contact-info .row{display:flex; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.12); font-size:0.98rem;}
+  .contact-info .row .k{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--amber); width:96px; flex-shrink:0; padding-top:2px;}
+  .card-preview{display:flex; gap:14px; flex-wrap:wrap; margin-top:24px;}
+  .card-preview img{width:260px; max-width:100%; border-radius:4px; box-shadow:0 10px 26px rgba(0,0,0,0.4);}
+  form.contact-form{display:flex; flex-direction:column; gap:14px;}
+  form.contact-form input, form.contact-form textarea{background:var(--navy-900); border:1px solid rgba(255,255,255,0.18); color:var(--paper); padding:13px 14px; font-family:'Noto Sans KR', sans-serif; font-size:0.95rem; border-radius:2px;}
+  form.contact-form textarea{resize:vertical; min-height:100px;}
+  form.contact-form label{font-size:0.82rem; color:#B7BEC4; margin-bottom:-6px;}
+  form.contact-form button{margin-top:6px; align-self:flex-start;}
+
+  footer.site{background:var(--navy-950); color:#7A8590; font-size:0.8rem; padding:24px 0 40px; border-top:1px solid rgba(255,255,255,0.1);}
+
+  /* ---------- ADMIN + BOARDS ---------- */
+  .admin-toggle{
+    margin-left:12px; background:transparent; border:1.5px solid var(--paper-line);
+    width:38px; height:38px; border-radius:2px; cursor:pointer; font-size:1rem;
+    display:flex; align-items:center; justify-content:center; color:var(--ink);
+  }
+  .admin-toggle.on{border-color:var(--seal); color:var(--seal);}
+  body.is-admin .admin-only{display:inline-flex !important;}
+  .admin-only{display:none;}
+  .admin-banner{display:none; background:var(--amber); color:#3A2A05; font-size:0.82rem; padding:10px 0; text-align:center;}
+  body.is-admin .admin-banner{display:block;}
+  .board-head{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap;}
+  .board-list{display:flex; flex-direction:column; gap:1px; background:var(--paper-line); border:1px solid var(--paper-line);}
+  .post-card{background:#fff; padding:24px 26px;}
+  #ai-coding .post-card, #archive .post-card{background:var(--paper);}
+  .post-card .post-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+  .post-card h3{font-size:1.05rem; font-weight:800; margin-bottom:6px;}
+  .post-card .post-date{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:#8A929A; margin-bottom:10px; display:block;}
+  .post-card .post-body{color:#3D4750; font-size:0.94rem; white-space:pre-wrap;}
+  .post-card .post-link{display:inline-block; margin-top:10px; font-size:0.86rem; color:var(--seal); text-decoration:underline;}
+  .post-actions{display:flex; gap:8px; flex-shrink:0;}
+  .post-actions button{
+    background:none; border:1px solid var(--paper-line); color:#5A636C;
+    font-size:0.76rem; padding:5px 10px; border-radius:2px; cursor:pointer; font-family:'Noto Sans KR', sans-serif;
+  }
+  .post-actions button:hover{border-color:var(--seal); color:var(--seal);}
+  .board-empty{background:#fff; padding:40px 26px; text-align:center; color:#8A929A; font-size:0.92rem;}
+
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(15,23,32,0.65); z-index:100;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:#fff; width:100%; max-width:520px; padding:30px; border-radius:2px;
+    max-height:86vh; overflow-y:auto;
+  }
+  .modal-box h3{font-size:1.15rem; font-weight:800; margin-bottom:20px;}
+  .modal-box label{display:block; font-size:0.82rem; color:#5A636C; margin:14px 0 6px;}
+  .modal-box input, .modal-box textarea{
+    width:100%; border:1px solid var(--paper-line); padding:11px 12px; font-family:'Noto Sans KR', sans-serif;
+    font-size:0.94rem; border-radius:2px;
+  }
+  .modal-box textarea{min-height:140px; resize:vertical;}
+  .modal-actions{display:flex; gap:10px; margin-top:22px; justify-content:flex-end;}
+  .modal-actions button{cursor:pointer;}
+  .modal-actions .cancel-btn{background:none; border:1px solid var(--paper-line); padding:10px 18px; border-radius:2px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem;}
+
+
+  @media (max-width:860px){
+    nav.links{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1; max-height:220px; overflow:hidden;}
+    .hero-visual img{max-height:220px;}
+    .credential{grid-template-columns:1fr;}
+    .cap-grid{grid-template-columns:1fr;}
+    .par-row{grid-template-columns:1fr; gap:8px;}
+    .timeline{grid-template-columns:1fr; gap:36px;}
+    .timeline::before{display:none;}
+    .pricing-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr; gap:40px;}
+    .service-row{grid-template-columns:1fr; gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav-row">
+    <div class="brand">장지도사 <span class="tag">일반·특수 · 비상근</span></div>
+    <nav class="links">
+      <a href="#credential">소개</a>
+      <a href="#field">현장</a>
+      <a href="#capability">역량</a>
+      <a href="#services">협업 업무</a>
+      <a href="#culture">교양자료 예시</a>
+      <a href="#ai-coding">AI 바이브 코딩</a>
+      <a href="#archive">자료실</a>
+      <a href="#process">진행절차</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="cta-btn" href="#contact">전화 상담</a>
+    <button type="button" class="admin-toggle" id="adminToggle" title="관리자">🔒</button>
+  </div>
+</header>
+
+<div class="admin-banner">🔓 관리자 모드입니다 — 게시판에서 글쓰기·수정·삭제가 가능합니다.</div>
+
+<section class="hero">
+  <div class="hero-photo" role="img" aria-label="아파트 단지 현장을 순찰하는 경비원 뒷모습"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="status-badge mono">
+          <span class="dot-live" aria-hidden="true"></span>
+          상담 가능 · 부산·경남 권역
+          <span class="clock" id="liveClock">--:--:--</span>
+        </div>
+        <h1>자격증만 있는 경비지도사가 아닙니다.<br><span class="accent">현장을 뛰고, AI로 일하는 스마트한 경비지도사입니다.</span></h1>
+        <p class="lede">
+          일반경비지도사이자 특수경비원 신임교육을 수료한 장지도사입니다.
+          실제 경비 현장 근무 경험과 능숙한 컴퓨터·AI 활용 능력을 바탕으로,
+          배치신고부터 순회점검·직무교육·보고서 작성까지 빠르고 정확하게 지원합니다.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contact" class="cta-btn">전화로 상담하기</a>
+          <a href="#field" class="cta-btn ghost">현장 스냅 보기</a>
+        </div>
+        <div class="hero-meta">
+          <div class="item"><div class="num">일반·특수</div><div class="label">경비지도사 자격 (제42777호)</div></div>
+          <div class="item"><div class="num">AI 활용</div><div class="label">스마트 업무 처리</div></div>
+          <div class="item"><div class="num">부산·경남</div><div class="label">활동 가능 권역</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="images/character-fullbody.png" alt="경비지도사 캐릭터 일러스트">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="credential">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">01 · CREDENTIAL</span>
+      <h2>자격과 현장 경험</h2>
+      <p>자격증만으로 상담하지 않습니다. 일반·특수경비 자격과 실제 현장 근무 경험, 그리고 컴퓨터·AI 활용 능력까지 갖춘 경비지도사입니다.</p>
+    </div>
+    <div class="credential">
+      <div class="credential-body">
+        <h3>보유 자격 및 이력</h3>
+        <ul class="credential-list">
+          <li><span class="k">경비 자격</span><span>일반경비지도사 (자격번호 제42777호)</span></li>
+          <li><span class="k">특수경비</span><span>특수경비원 신임교육 수료</span></li>
+          <li><span class="k">현장 경험</span><span>경비 현장 실무 근무 이력</span></li>
+          <li><span class="k">방재·안전</span><span>소방안전관리자 1급, 산업안전기사</span></li>
+          <li><span class="k">영상보안</span><span>영상정보관리사</span></li>
+          <li><span class="k">행정·IT</span><span>사무자동화산업기사, 컴퓨터활용능력 2급, 업무에 AI 도구 활용</span></li>
+          <li><span class="k">활동 지역</span><span>부산광역시 및 경남 일부 지역</span></li>
+        </ul>
+      </div>
+      <div class="seal-panel">
+        <img src="images/logo.png" alt="GENERAL SECURITY INSTRUCTOR 로고" class="brand-logo">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="field" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">CURRENT · 현장 스냅</span>
+      <h2>현장에서 쌓은 경험</h2>
+      <p>강의실이 아니라 현장에서 확인한 것들입니다. 교육, 순찰, 관제, 점검까지 실제 업무 장면입니다.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item tall">
+        <img src="images/corridor-patrol.jpg" alt="사업장 복도를 순찰하는 모습" loading="lazy">
+        <div class="cap">사업장 순찰</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/training-1.jpg" alt="법정 직무교육 강의 진행 모습" loading="lazy">
+        <div class="cap">법정 직무교육 진행</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/control-room.jpg" alt="CCTV 관제 상황을 확인하는 모습" loading="lazy">
+        <div class="cap">관제 상황 확인</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/training-2.jpg" alt="신변보호 실무 교육 장면" loading="lazy">
+        <div class="cap">신변보호 실무 교육</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/inspection.jpg" alt="현장 시설 점검 모습" loading="lazy">
+        <div class="cap">현장 시설 점검</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="capability">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">02 · CAPABILITY</span>
+      <h2>핵심 역량</h2>
+      <p>특수경비 전문 교육 이수와 방재·행정 자격이 결합되어, 한 사람이 지도·점검·서류 관리를 함께 처리합니다.</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-card">
+        <span class="code">[지도]</span>
+        <h3>특수·일반경비 지도·감독</h3>
+        <ul>
+          <li>대원 근무 기강 점검</li>
+          <li>고난도 시설 경비 진단</li>
+          <li>정기 순회점검 프로세스 구축</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <span class="code">[방재]</span>
+        <h3>방재·산업안전 연계</h3>
+        <ul>
+          <li>소방안전관리자 1급 기반 자문</li>
+          <li>산업안전 리스크 사전 점검</li>
+          <li>영상정보(CCTV) 관제 운영 점검</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <span class="code">[행정]</span>
+        <h3>AI 기반 스마트 행정</h3>
+        <ul>
+          <li>법정 서류·일지 전산화</li>
+          <li>AI 도구 활용 보고서·점검표 작성</li>
+          <li>정기 리포트 작성 및 전달</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="par">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">03 · CASE</span>
+      <h2>실무 접근 방식</h2>
+      <p>문제 진단부터 실행, 결과 관리까지의 흐름입니다.</p>
+    </div>
+    <div class="par-table">
+      <div class="par-row">
+        <div class="par-k">PROBLEM</div>
+        <p>경비지도사를 상근으로 두기 어려운 경비업체·현장에서는 배치신고, 순회점검, 직무교육 같은 법정 의무 관리에 공백이 생기기 쉽습니다.</p>
+      </div>
+      <div class="par-row">
+        <div class="par-k">ACTION</div>
+        <p>특수경비원 신임교육 매뉴얼을 기준으로 맞춤형 직무 훈련을 진행하고, 방재·영상보안 시스템과 연계한 정밀 점검을 수행합니다.</p>
+      </div>
+      <div class="par-row">
+        <div class="par-k">RESULT</div>
+        <p>법정 준수 사항의 누락을 막고 보안 사고 발생 가능성을 낮춰, 사업장의 안전 관리 수준을 안정적으로 유지합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">04 · SCOPE</span>
+      <h2>협업 방향 및 업무 범위</h2>
+      <p>비상근 구조 안에서 예방 중심의 안전 관리를 실현합니다.</p>
+    </div>
+    <div class="service-log">
+      <div class="service-row">
+        <div class="code">[점검]</div>
+        <div><h3>경비원 순회점검 및 직무교육</h3><p>정기 순회점검과 법정 직무교육을 계획하고 실시합니다.</p></div>
+      </div>
+      <div class="service-row">
+        <div class="code">[민원]</div>
+        <div><h3>집단민원현장 관리</h3><p>집단민원 발생 현장의 경비 운영과 대응을 관리합니다.</p></div>
+      </div>
+      <div class="service-row">
+        <div class="code">[진단]</div>
+        <div><h3>시설보안 및 경비 진단</h3><p>사업장 시설과 경비 체계의 취약점을 점검하고 진단합니다.</p></div>
+      </div>
+      <div class="service-row">
+        <div class="code">[지도]</div>
+        <div><h3>경비원 교육 및 지도·감독</h3><p>현장 대원의 근무 기강을 확립하고 지도·감독합니다.</p></div>
+      </div>
+      <div class="service-row">
+        <div class="code">[컨설팅]</div>
+        <div><h3>보안 시스템 설계 및 컨설팅</h3><p>CCTV 등 보안 시스템 구성을 검토하고 개선 방향을 제안합니다.</p></div>
+      </div>
+      <div class="service-row">
+        <div class="code">[계획]</div>
+        <div><h3>범죄 예방 및 안전 관리 계획 수립</h3><p>사업장 특성에 맞는 범죄 예방·안전 관리 계획을 수립합니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="culture">
+  <div class="wrap">
+    <div class="section-head board-head">
+      <div>
+        <span class="eyebrow">08 · BOARD</span>
+        <h2>교양자료 예시</h2>
+        <p>직무교육에 활용하는 교양·안전자료 예시입니다.</p>
+      </div>
+      <button type="button" class="cta-btn ghost admin-only write-btn" data-board="culture">글쓰기</button>
+    </div>
+    <div class="board-list" id="board-culture"></div>
+  </div>
+</section>
+
+<section id="ai-coding" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head board-head">
+      <div>
+        <span class="eyebrow">09 · BOARD</span>
+        <h2>AI 바이브 코딩</h2>
+        <p>업무에 활용하려고 AI로 직접 만든 도구들입니다.</p>
+      </div>
+      <button type="button" class="cta-btn ghost admin-only write-btn" data-board="aicoding">글쓰기</button>
+    </div>
+    <div class="board-list" id="board-aicoding"></div>
+  </div>
+</section>
+
+<section id="archive">
+  <div class="wrap">
+    <div class="section-head board-head">
+      <div>
+        <span class="eyebrow">10 · BOARD</span>
+        <h2>자료실</h2>
+        <p>서식·양식·법령 자료를 모아둔 공간입니다.</p>
+      </div>
+      <button type="button" class="cta-btn ghost admin-only write-btn" data-board="archive">글쓰기</button>
+    </div>
+    <div class="board-list" id="board-archive"></div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">05 · PROCESS</span>
+      <h2>진행 절차</h2>
+      <p>계약 전 상담부터 계약 후 정기 리포트까지, 다섯 단계로 진행됩니다.</p>
+    </div>
+    <div class="timeline">
+      <div class="step"><div class="step-num">1</div><h4>상담</h4><p>사업장 규모, 경비 인원, 현재 애로사항을 파악합니다.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>계약</h4><p>업무 범위와 방문 주기를 정해 위탁 계약을 체결합니다.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>현황 진단</h4><p>기존 배치신고·서류·보안 시스템 현황을 점검합니다.</p></div>
+      <div class="step"><div class="step-num">4</div><h4>정기 지도·교육</h4><p>순회점검과 법정 직무교육, 모의 훈련을 실시합니다.</p></div>
+      <div class="step"><div class="step-num">5</div><h4>월간 리포트</h4><p>점검·교육 결과와 개선 제안을 담당자에게 보고합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="mission">
+  <div class="wrap">
+    <blockquote>“특수경비의 전문성으로, 사업장의 보안 공백을 하나씩 줄여가겠습니다.”</blockquote>
+    <cite>— 장지도사</cite>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">06 · FAQ</span>
+      <h2>자주 묻는 질문</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>비상근 경비지도사란 무엇인가요?</summary>
+        <div class="faq-a">경비업체의 경비지도사 업무를 필요한 범위와 일정에 따라 지원하는 방식입니다.</div>
+      </details>
+      <details class="faq-item">
+        <summary>어떤 업무를 의뢰할 수 있나요?</summary>
+        <div class="faq-a">경비원의 지도·감독, 순회점검, 직무교육 관련 업무 등 계약 및 관련 법령에 따른 업무를 협의할 수 있습니다.</div>
+      </details>
+      <details class="faq-item">
+        <summary>부산 외 지역도 가능한가요?</summary>
+        <div class="faq-a">부산을 중심으로 경남 지역은 현장 위치와 업무 범위에 따라 협의 가능합니다.</div>
+      </details>
+      <details class="faq-item">
+        <summary>비용은 얼마인가요?</summary>
+        <div class="faq-a">현장 규모와 업무 범위에 따라 달라지므로 상담 후 견적을 안내합니다.</div>
+      </details>
+      <details class="faq-item">
+        <summary>상담 비용이 있나요?</summary>
+        <div class="faq-a">첫 상담은 부담 없이 문의하실 수 있습니다.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow" style="color:var(--amber);">07 · CONTACT</span>
+      <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:24px;">지금 상담을 시작하세요</h2>
+      <div class="row"><span class="k">담당자</span><span>장지도사 (일반경비지도사 / CS 사업부)</span></div>
+      <div class="row"><span class="k">전화</span><span>010-9942-6858</span></div>
+      <div class="row"><span class="k">팩스</span><span>0504-228-6858</span></div>
+      <div class="row"><span class="k">카카오톡</span><span>카카오톡 채널 스마트 특수경비지도사</span></div>
+      <div class="row"><span class="k">이메일</span><span>safajang@naver.com</span></div>
+      <div class="row"><span class="k">주소</span><span>48296 부산광역시 수영구 광안로35번길 18, 208호 (광안동, 부흥)</span></div>
+      <div class="row"><span class="k">활동지역</span><span>부산광역시 · 경남 일부</span></div>
+      <div class="row"><span class="k">상담시간</span><span>07:00 – 20:00</span></div>
+      <div class="card-preview">
+        <img src="images/business-card-front.jpg" alt="명함 앞면">
+        <img src="images/business-card-back.png" alt="명함 뒷면">
+      </div>
+    </div>
+    <!--
+      Formspree 연동 완료: Form ID xaeyyyry로 연결되어 있습니다.
+      담당자 이메일(safajang@naver.com) 인증을 마치면 문의 내용이 해당 메일로 전달됩니다.
+      (Google Forms를 쓰고 싶다면 이 <form> 대신 Google Forms embed iframe으로 교체 가능)
+    -->
+    <form class="contact-form" action="https://formspree.io/f/xaeyyyry" method="POST">
+      <label for="f-name">담당자 성함</label>
+      <input id="f-name" name="name" type="text" placeholder="예) 홍길동" required>
+      <label for="f-phone">연락처</label>
+      <input id="f-phone" name="phone" type="tel" placeholder="010-0000-0000" required>
+      <label for="f-site">사업장명 / 시설명</label>
+      <input id="f-site" name="site" type="text" placeholder="예) OO시설 관리팀">
+      <label for="f-msg">문의 내용</label>
+      <textarea id="f-msg" name="message" placeholder="현재 경비 인원, 애로사항 등을 적어주세요."></textarea>
+      <input type="hidden" name="_subject" value="[홈페이지 문의] 상담 요청이 도착했습니다">
+      <button type="submit" class="cta-btn">상담 요청 보내기</button>
+    </form>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">© 2026 장지도사. 경비업법에 따른 지도·감독, 직무교육, 리스크 자문 서비스.</div>
+</footer>
+
+<div class="modal-overlay" id="postModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">글쓰기</h3>
+    <label for="m-title">제목</label>
+    <input id="m-title" type="text" placeholder="제목을 입력하세요">
+    <label for="m-content">내용</label>
+    <textarea id="m-content" placeholder="내용을 입력하세요"></textarea>
+    <label for="m-link">참고 링크 (선택)</label>
+    <input id="m-link" type="text" placeholder="https://...">
+    <div class="modal-actions">
+      <button type="button" class="cancel-btn" id="modalCancel">취소</button>
+      <button type="button" class="cta-btn" id="modalSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function tick(){
+    const el = document.getElementById('liveClock');
+    if(!el) return;
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    el.textContent = `${h}:${m}:${s}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ===== 관리자 게시판 (localStorage 기반) =====
+     주의: 이 게시판은 서버가 없는 정적 페이지용으로,
+     글 데이터는 "이 브라우저"에만 저장됩니다.
+     관리자가 이 브라우저에서 올린 글은 같은 브라우저에서만 보이며,
+     다른 방문자·다른 기기에는 표시되지 않습니다.
+     여러 방문자에게 공통으로 보이는 게시판이 필요하면
+     별도의 백엔드(구글시트 연동, 헤드리스 CMS 등)가 필요합니다. */
+
+  const ADMIN_PASSWORD = 'jang2026'; // TODO: 실제 운영 전 반드시 변경하세요
+
+  const DEFAULT_POSTS = {
+    culture: [
+      {id:'c1', title:'신임·직무교육 24시간 12과목 커리큘럼', date:'2026-03-02', content:'아파트 단지 특화 신임/직무교육 커리큘럼 예시입니다. 시설 안내, 근무요령, 화재예방, 응급처치 등 12개 과목으로 구성됩니다.', link:''},
+      {id:'c2', title:'여름철 안전교육 자료', date:'2026-06-10', content:'폭염 대비 수칙과 여름철 방범 포인트를 정리한 교육자료 예시입니다.', link:''},
+      {id:'c3', title:'태풍·집중호우 대비 교육자료', date:'2026-08-01', content:'태풍·집중호우 시기 시설 점검 체크리스트와 대응 요령을 담은 자료입니다.', link:''}
+    ],
+    aicoding: [
+      {id:'a1', title:'3조2교대 급여 계산기', date:'2026-04-12', content:'3조2교대 근무표를 기준으로 급여를 자동 계산해주는 웹 앱입니다. AI 도구로 직접 설계하고 배포했습니다.', link:''},
+      {id:'a2', title:'근무표 자동화 앱', date:'2026-05-20', content:'월별 근무표를 자동으로 편성하고 관리하는 도구입니다.', link:''},
+      {id:'a3', title:'보안업체 데이터 수집 스크립트', date:'2026-02-18', content:'전국 경비업체 현황 데이터를 수집해 정리하는 스크립트입니다.', link:''}
+    ],
+    archive: [
+      {id:'r1', title:'배치신고서 서식 (예시)', date:'2026-01-15', content:'경비원 배치신고서 기본 서식 예시입니다. 실제 자료는 관리자가 등록 후 안내드립니다.', link:''},
+      {id:'r2', title:'경비원 근무일지 양식 (예시)', date:'2026-01-15', content:'현장에서 사용하는 근무일지 양식 예시입니다.', link:''}
+    ]
+  };
+
+  function loadBoard(key){
+    const raw = localStorage.getItem('board_' + key + '_v1');
+    if(raw){
+      try{ return JSON.parse(raw); }catch(e){ /* fall through */ }
+    }
+    return DEFAULT_POSTS[key] ? DEFAULT_POSTS[key].slice() : [];
+  }
+  function saveBoard(key, posts){
+    localStorage.setItem('board_' + key + '_v1', JSON.stringify(posts));
+  }
+
+  function renderBoard(key){
+    const container = document.getElementById('board-' + key);
+    if(!container) return;
+    const posts = loadBoard(key).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+    container.innerHTML = '';
+    if(posts.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'board-empty';
+      empty.textContent = '등록된 글이 없습니다.';
+      container.appendChild(empty);
+      return;
+    }
+    posts.forEach(post => {
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      const linkHtml = post.link ? `<a class="post-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">관련 링크 열기 →</a>` : '';
+      card.innerHTML = `
+        <div class="post-top">
+          <div>
+            <h3>${escapeHtml(post.title)}</h3>
+            <span class="post-date mono">${escapeHtml(post.date || '')}</span>
+          </div>
+          <div class="post-actions admin-only">
+            <button type="button" class="edit-btn">수정</button>
+            <button type="button" class="del-btn">삭제</button>
+          </div>
+        </div>
+        <div class="post-body">${escapeHtml(post.content)}</div>
+        ${linkHtml}
+      `;
+      card.querySelector('.edit-btn')?.addEventListener('click', ()=> openModal(key, post.id));
+      card.querySelector('.del-btn')?.addEventListener('click', ()=> deletePost(key, post.id));
+      container.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str || '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+  function escapeAttr(str){ return escapeHtml(str); }
+
+  function deletePost(key, id){
+    if(!confirm('이 글을 삭제할까요?')) return;
+    const posts = loadBoard(key).filter(p => p.id !== id);
+    saveBoard(key, posts);
+    renderBoard(key);
+  }
+
+  let modalState = { board:null, id:null };
+  const modal = document.getElementById('postModal');
+
+  function openModal(boardKey, postId){
+    modalState = { board: boardKey, id: postId || null };
+    const titleEl = document.getElementById('modalTitle');
+    const tInput = document.getElementById('m-title');
+    const cInput = document.getElementById('m-content');
+    const lInput = document.getElementById('m-link');
+    if(postId){
+      const post = loadBoard(boardKey).find(p => p.id === postId);
+      titleEl.textContent = '글 수정';
+      tInput.value = post ? post.title : '';
+      cInput.value = post ? post.content : '';
+      lInput.value = post ? (post.link || '') : '';
+    } else {
+      titleEl.textContent = '글쓰기';
+      tInput.value = ''; cInput.value = ''; lInput.value = '';
+    }
+    modal.classList.add('open');
+  }
+  function closeModal(){ modal.classList.remove('open'); }
+
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('postModal').addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+  document.getElementById('modalSave').addEventListener('click', () => {
+    const title = document.getElementById('m-title').value.trim();
+    const content = document.getElementById('m-content').value.trim();
+    const link = document.getElementById('m-link').value.trim();
+    if(!title || !content){ alert('제목과 내용을 입력해주세요.'); return; }
+    const key = modalState.board;
+    let posts = loadBoard(key);
+    if(modalState.id){
+      posts = posts.map(p => p.id === modalState.id ? {...p, title, content, link} : p);
+    } else {
+      const today = new Date().toISOString().slice(0,10);
+      posts.push({ id: 'p' + Date.now(), title, content, link, date: today });
+    }
+    saveBoard(key, posts);
+    renderBoard(key);
+    closeModal();
+  });
+
+  document.querySelectorAll('.write-btn').forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.board, null));
+  });
+
+  ['culture','aicoding','archive'].forEach(renderBoard);
+
+  /* ===== 관리자 로그인 토글 ===== */
+  const adminToggle = document.getElementById('adminToggle');
+  function applyAdminState(){
+    const isAdmin = sessionStorage.getItem('isAdmin') === '1';
+    document.body.classList.toggle('is-admin', isAdmin);
+    adminToggle.classList.toggle('on', isAdmin);
+    adminToggle.textContent = isAdmin ? '🔓' : '🔒';
+  }
+  adminToggle.addEventListener('click', () => {
+    const isAdmin = sessionStorage.getItem('isAdmin') === '1';
+    if(isAdmin){
+      sessionStorage.removeItem('isAdmin');
+    } else {
+      const pw = prompt('관리자 비밀번호를 입력하세요');
+      if(pw === ADMIN_PASSWORD){
+        sessionStorage.setItem('isAdmin', '1');
+      } else if(pw !== null){
+        alert('비밀번호가 올바르지 않습니다.');
+      }
+    }
+    applyAdminState();
+  });
+  applyAdminState();
+</script>
+
+</body>
+</html>
