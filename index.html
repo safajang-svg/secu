@@ -173,6 +173,7 @@
   .post-card h3{font-size:1.05rem; font-weight:800; margin-bottom:6px;}
   .post-card .post-date{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:#8A929A; margin-bottom:10px; display:block;}
   .post-card .post-body{color:#3D4750; font-size:0.94rem; white-space:pre-wrap;}
+  .post-card .post-image{width:100%; max-width:420px; border-radius:4px; margin-bottom:14px; display:block;}
   .post-card .post-link{display:inline-block; margin-top:10px; font-size:0.86rem; color:var(--seal); text-decoration:underline;}
   .post-actions{display:flex; gap:8px; flex-shrink:0;}
   .post-actions button{
@@ -198,6 +199,9 @@
     font-size:0.94rem; border-radius:2px;
   }
   .modal-box textarea{min-height:140px; resize:vertical;}
+  .image-preview{margin-top:10px;}
+  .image-preview img{max-width:100%; max-height:200px; border-radius:4px; display:block;}
+  .image-preview .clear-img-btn{margin-top:8px; background:none; border:1px solid var(--paper-line); padding:5px 10px; font-size:0.78rem; border-radius:2px; cursor:pointer; color:#5A636C;}
   .modal-actions{display:flex; gap:10px; margin-top:22px; justify-content:flex-end;}
   .modal-actions button{cursor:pointer;}
   .modal-actions .cancel-btn{background:none; border:1px solid var(--paper-line); padding:10px 18px; border-radius:2px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem;}
@@ -252,7 +256,7 @@
           상담 가능 · 부산·경남 권역
           <span class="clock" id="liveClock">--:--:--</span>
         </div>
-        <h1>자격증만 있는 경비지도사가 아닙니다.<br><span class="accent">현장을 뛰고, AI로 일하는 스마트한 경비지도사입니다.</span></h1>
+        <h1>자격증만 있는 경비지도사가 아닙니다.<br><span class="accent">현장을 뛰고,<br>AI로 일하는 스마트한<br>경비지도사입니다.</span></h1>
         <p class="lede">
           일반경비지도사이자 특수경비원 신임교육을 수료한 장지도사입니다.
           실제 경비 현장 근무 경험과 능숙한 컴퓨터·AI 활용 능력을 바탕으로,
@@ -581,6 +585,9 @@
     <textarea id="m-content" placeholder="내용을 입력하세요"></textarea>
     <label for="m-link">참고 링크 (선택)</label>
     <input id="m-link" type="text" placeholder="https://...">
+    <label for="m-image">사진 첨부 (선택)</label>
+    <input id="m-image" type="file" accept="image/*">
+    <div id="m-image-preview" class="image-preview"></div>
     <div class="modal-actions">
       <button type="button" class="cancel-btn" id="modalCancel">취소</button>
       <button type="button" class="cta-btn" id="modalSave">저장</button>
@@ -655,6 +662,7 @@
       const card = document.createElement('div');
       card.className = 'post-card';
       const linkHtml = post.link ? `<a class="post-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">관련 링크 열기 →</a>` : '';
+      const imageHtml = post.image ? `<img class="post-image" src="${post.image}" alt="${escapeAttr(post.title)} 첨부 이미지">` : '';
       card.innerHTML = `
         <div class="post-top">
           <div>
@@ -666,6 +674,7 @@
             <button type="button" class="del-btn">삭제</button>
           </div>
         </div>
+        ${imageHtml}
         <div class="post-body">${escapeHtml(post.content)}</div>
         ${linkHtml}
       `;
@@ -687,25 +696,65 @@
     renderBoard(key);
   }
 
-  let modalState = { board:null, id:null };
+  let modalState = { board:null, id:null, image:null };
   const modal = document.getElementById('postModal');
+  const imageInput = document.getElementById('m-image');
+  const imagePreview = document.getElementById('m-image-preview');
+
+  function renderImagePreview(){
+    imagePreview.innerHTML = '';
+    if(modalState.image){
+      const img = document.createElement('img');
+      img.src = modalState.image;
+      imagePreview.appendChild(img);
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'clear-img-btn';
+      clearBtn.textContent = '사진 제거';
+      clearBtn.addEventListener('click', () => {
+        modalState.image = null;
+        imageInput.value = '';
+        renderImagePreview();
+      });
+      imagePreview.appendChild(clearBtn);
+    }
+  }
+
+  imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0];
+    if(!file) return;
+    if(file.size > 1.5 * 1024 * 1024){
+      alert('사진 용량이 너무 큽니다 (1.5MB 이하로 올려주세요). 이 게시판은 브라우저에 저장되는 방식이라 큰 파일은 저장이 안 될 수 있어요.');
+      imageInput.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      modalState.image = e.target.result;
+      renderImagePreview();
+    };
+    reader.readAsDataURL(file);
+  });
 
   function openModal(boardKey, postId){
-    modalState = { board: boardKey, id: postId || null };
+    modalState = { board: boardKey, id: postId || null, image: null };
     const titleEl = document.getElementById('modalTitle');
     const tInput = document.getElementById('m-title');
     const cInput = document.getElementById('m-content');
     const lInput = document.getElementById('m-link');
+    imageInput.value = '';
     if(postId){
       const post = loadBoard(boardKey).find(p => p.id === postId);
       titleEl.textContent = '글 수정';
       tInput.value = post ? post.title : '';
       cInput.value = post ? post.content : '';
       lInput.value = post ? (post.link || '') : '';
+      modalState.image = post && post.image ? post.image : null;
     } else {
       titleEl.textContent = '글쓰기';
       tInput.value = ''; cInput.value = ''; lInput.value = '';
     }
+    renderImagePreview();
     modal.classList.add('open');
   }
   function closeModal(){ modal.classList.remove('open'); }
@@ -717,19 +766,26 @@
     const title = document.getElementById('m-title').value.trim();
     const content = document.getElementById('m-content').value.trim();
     const link = document.getElementById('m-link').value.trim();
+    const image = modalState.image || null;
     if(!title || !content){ alert('제목과 내용을 입력해주세요.'); return; }
     const key = modalState.board;
     let posts = loadBoard(key);
-    if(modalState.id){
-      posts = posts.map(p => p.id === modalState.id ? {...p, title, content, link} : p);
-    } else {
-      const today = new Date().toISOString().slice(0,10);
-      posts.push({ id: 'p' + Date.now(), title, content, link, date: today });
+    try {
+      if(modalState.id){
+        posts = posts.map(p => p.id === modalState.id ? {...p, title, content, link, image} : p);
+      } else {
+        const today = new Date().toISOString().slice(0,10);
+        posts.push({ id: 'p' + Date.now(), title, content, link, image, date: today });
+      }
+      saveBoard(key, posts);
+    } catch(e){
+      alert('저장 공간이 부족합니다. 사진 용량을 줄이거나 오래된 글의 사진을 정리해주세요.');
+      return;
     }
-    saveBoard(key, posts);
     renderBoard(key);
     closeModal();
   });
+
 
   document.querySelectorAll('.write-btn').forEach(btn => {
     btn.addEventListener('click', () => openModal(btn.dataset.board, null));
