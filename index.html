@@ -203,6 +203,8 @@
   .post-card .post-body{color:#3D4750; font-size:0.94rem; white-space:pre-wrap;}
   .post-card .post-image{width:100%; max-width:420px; border-radius:4px; margin-bottom:14px; display:block;}
   .post-card .post-link{display:inline-block; margin-top:10px; font-size:0.86rem; color:var(--seal); text-decoration:underline;}
+  .post-card .post-file{display:inline-block; margin-bottom:14px; padding:8px 14px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.86rem; color:var(--ink); text-decoration:none; background:#F4F1EA;}
+  .post-card .post-file:hover{border-color:var(--seal); color:var(--seal);}
   .post-actions{display:flex; gap:8px; flex-shrink:0;}
   .post-actions button{
     background:none; border:1px solid var(--paper-line); color:#5A636C;
@@ -229,7 +231,8 @@
   .modal-box textarea{min-height:140px; resize:vertical;}
   .image-preview{margin-top:10px;}
   .image-preview img{max-width:100%; max-height:200px; border-radius:4px; display:block;}
-  .image-preview .clear-img-btn{margin-top:8px; background:none; border:1px solid var(--paper-line); padding:5px 10px; font-size:0.78rem; border-radius:2px; cursor:pointer; color:#5A636C;}
+  .image-preview .file-tag{padding:8px 12px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.86rem; display:inline-block; background:#F4F1EA;}
+  .image-preview .clear-img-btn{margin-top:8px; background:none; border:1px solid var(--paper-line); padding:5px 10px; font-size:0.78rem; border-radius:2px; cursor:pointer; color:#5A636C; display:block;}
   .modal-actions{display:flex; gap:10px; margin-top:22px; justify-content:flex-end;}
   .modal-actions button{cursor:pointer;}
   .modal-actions .cancel-btn{background:none; border:1px solid var(--paper-line); padding:10px 18px; border-radius:2px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem;}
@@ -940,8 +943,8 @@
     <textarea id="m-content" placeholder="내용을 입력하세요"></textarea>
     <label for="m-link">참고 링크 (선택)</label>
     <input id="m-link" type="text" placeholder="https://...">
-    <label for="m-image">사진 첨부 (선택)</label>
-    <input id="m-image" type="file" accept="image/*">
+    <label for="m-image">파일 첨부 (사진·PDF·문서 등, 선택)</label>
+    <input id="m-image" type="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.hwp,.hwpx,.txt,.zip">
     <div id="m-image-preview" class="image-preview"></div>
     <div class="modal-actions">
       <button type="button" class="cancel-btn" id="modalCancel">취소</button>
@@ -952,6 +955,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
   function tick(){
     const el = document.getElementById('liveClock');
@@ -971,19 +975,22 @@
      2) 프로젝트 개요 화면에서 </> (웹) 아이콘 클릭 → 앱 등록 (Firebase Hosting 체크 안 해도 됨)
      3) 화면에 나오는 firebaseConfig 값을 복사해서 아래 FIREBASE_CONFIG에 그대로 붙여넣기
      4) 왼쪽 메뉴 "Firestore Database" → 데이터베이스 만들기 → 위치 선택 후 "테스트 모드로 시작"
-     5) Firestore의 "규칙" 탭에서 아래 내용으로 교체 후 게시:
+     5) 왼쪽 메뉴 "Authentication" → "시작하기" → 로그인 방법에서 "이메일/비밀번호" 사용 설정
+     6) Authentication의 "Users" 탭 → "사용자 추가" → 관리자용 이메일/비밀번호로 계정 1개 생성
+        (이 이메일 주소를 아래 ADMIN_EMAIL에 그대로 넣어주세요)
+     7) Firestore의 "규칙" 탭에서 아래 내용으로 교체 후 게시:
           rules_version = '2';
           service cloud.firestore {
             match /databases/{database}/documents {
               match /posts/{postId} {
-                allow read, write: if true;
+                allow read: if true;
+                allow write: if request.auth != null;
               }
             }
           }
-        (주의: 이 규칙은 누구나 읽고 쓸 수 있게 여는 규칙입니다. 관리자 비밀번호가
-        화면단에서 글쓰기 버튼을 가려주긴 하지만, 브라우저 개발자도구를 다룰 줄 아는
-        사람은 이 규칙만으로는 막을 수 없습니다. 운영이 안정되면 더 강한 규칙으로
-        바꾸는 걸 권장합니다.) */
+        (이 규칙은 "글 읽기는 누구나, 글 쓰기·수정·삭제는 로그인한 관리자만" 가능하게
+        막아줍니다. 6번에서 만든 관리자 계정으로 로그인해야만 글을 쓰거나 지울 수 있고,
+        일반 방문자는 브라우저 개발자도구를 써도 삭제할 수 없습니다.) */
 
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCVph2hGA9gFTXC9H6B-u8kdI2S2-Sg8DE",
@@ -994,13 +1001,13 @@
     appId: "1:775060095442:web:7b0811b55a9f3bf5b3080b"
   };
 
+  const ADMIN_EMAIL = 'safajang@gmail.com';
+
   let db = null;
   if (FIREBASE_CONFIG.apiKey) {
     firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
   }
-
-  const ADMIN_PASSWORD = 'dbss0415@';
 
   const DEFAULT_POSTS = {
     culture: [
@@ -1042,13 +1049,13 @@
         const { board, post } = payload;
         await db.collection('posts').doc(post.id).set({
           board, title: post.title, content: post.content,
-          link: post.link || '', image: post.image || '', date: post.date
+          link: post.link || '', image: post.image || '', fileName: post.fileName || '', date: post.date
         });
       } else if(action === 'update'){
         const { post } = payload;
         await db.collection('posts').doc(post.id).update({
           title: post.title, content: post.content,
-          link: post.link || '', image: post.image || '', date: post.date
+          link: post.link || '', image: post.image || '', fileName: post.fileName || '', date: post.date
         });
       } else if(action === 'delete'){
         await db.collection('posts').doc(payload.id).delete();
@@ -1078,7 +1085,13 @@
       const card = document.createElement('div');
       card.className = 'post-card';
       const linkHtml = post.link ? `<a class="post-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">관련 링크 열기 →</a>` : '';
-      const imageHtml = post.image ? `<img class="post-image" src="${post.image}" alt="${escapeAttr(post.title)} 첨부 이미지">` : '';
+      const isImageFile = (post.image || '').startsWith('data:image/');
+      let attachHtml = '';
+      if(post.image && isImageFile){
+        attachHtml = `<img class="post-image" src="${post.image}" alt="${escapeAttr(post.title)} 첨부 이미지">`;
+      } else if(post.image){
+        attachHtml = `<a class="post-file" href="${post.image}" download="${escapeAttr(post.fileName || '첨부파일')}">📎 ${escapeHtml(post.fileName || '첨부파일')} 다운로드</a>`;
+      }
       card.innerHTML = `
         <div class="post-top">
           <div>
@@ -1090,7 +1103,7 @@
             <button type="button" class="del-btn">삭제</button>
           </div>
         </div>
-        ${imageHtml}
+        ${attachHtml}
         <div class="post-body">${escapeHtml(post.content)}</div>
         ${linkHtml}
       `;
@@ -1111,7 +1124,7 @@
     if(ok) renderBoard(key);
   }
 
-  let modalState = { board:null, id:null, image:null, date:null };
+  let modalState = { board:null, id:null, image:null, fileName:null, date:null };
   const modal = document.getElementById('postModal');
   const imageInput = document.getElementById('m-image');
   const imagePreview = document.getElementById('m-image-preview');
@@ -1119,15 +1132,24 @@
   function renderImagePreview(){
     imagePreview.innerHTML = '';
     if(modalState.image){
-      const img = document.createElement('img');
-      img.src = modalState.image;
-      imagePreview.appendChild(img);
+      const isImageFile = modalState.image.startsWith('data:image/');
+      if(isImageFile){
+        const img = document.createElement('img');
+        img.src = modalState.image;
+        imagePreview.appendChild(img);
+      } else {
+        const fileTag = document.createElement('div');
+        fileTag.className = 'file-tag';
+        fileTag.textContent = '📎 ' + (modalState.fileName || '첨부파일');
+        imagePreview.appendChild(fileTag);
+      }
       const clearBtn = document.createElement('button');
       clearBtn.type = 'button';
       clearBtn.className = 'clear-img-btn';
-      clearBtn.textContent = '사진 제거';
+      clearBtn.textContent = '파일 제거';
       clearBtn.addEventListener('click', () => {
         modalState.image = null;
+        modalState.fileName = null;
         imageInput.value = '';
         renderImagePreview();
       });
@@ -1139,20 +1161,21 @@
     const file = imageInput.files[0];
     if(!file) return;
     if(file.size > 700 * 1024){
-      alert('사진 용량이 너무 큽니다 (700KB 이하로 올려주세요). Firestore 문서 용량 제한(1MB) 때문에 이보다 작은 사진만 첨부할 수 있어요.');
+      alert('파일 용량이 너무 큽니다 (700KB 이하로 올려주세요). Firestore 문서 용량 제한(1MB) 때문에 이보다 작은 파일만 첨부할 수 있어요.');
       imageInput.value = '';
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => {
       modalState.image = e.target.result;
+      modalState.fileName = file.name;
       renderImagePreview();
     };
     reader.readAsDataURL(file);
   });
 
   async function openModal(boardKey, postId){
-    modalState = { board: boardKey, id: postId || null, image: null, date: null };
+    modalState = { board: boardKey, id: postId || null, image: null, fileName: null, date: null };
     const titleEl = document.getElementById('modalTitle');
     const tInput = document.getElementById('m-title');
     const cInput = document.getElementById('m-content');
@@ -1165,6 +1188,7 @@
       cInput.value = post ? post.content : '';
       lInput.value = post ? (post.link || '') : '';
       modalState.image = post && post.image ? post.image : null;
+      modalState.fileName = post && post.fileName ? post.fileName : null;
       modalState.date = post ? post.date : null;
     } else {
       titleEl.textContent = '글쓰기';
@@ -1183,15 +1207,16 @@
     const content = document.getElementById('m-content').value.trim();
     const link = document.getElementById('m-link').value.trim();
     const image = modalState.image || null;
+    const fileName = modalState.fileName || null;
     if(!title || !content){ alert('제목과 내용을 입력해주세요.'); return; }
     const key = modalState.board;
     const today = new Date().toISOString().slice(0,10);
     const date = modalState.id ? (modalState.date || today) : today;
     let ok;
     if(modalState.id){
-      ok = await apiRequest('update', { board:key, post:{ id: modalState.id, title, content, link, image, date } });
+      ok = await apiRequest('update', { board:key, post:{ id: modalState.id, title, content, link, image, fileName, date } });
     } else {
-      ok = await apiRequest('create', { board:key, post:{ id: 'p' + Date.now(), title, content, link, image, date } });
+      ok = await apiRequest('create', { board:key, post:{ id: 'p' + Date.now(), title, content, link, image, fileName, date } });
     }
     if(ok){
       renderBoard(key);
@@ -1205,29 +1230,50 @@
 
   ['culture','aicoding','archive'].forEach(renderBoard);
 
-  /* ===== 관리자 로그인 토글 ===== */
+  /* ===== 관리자 로그인 토글 (Firebase Authentication 연동) ===== */
   const adminToggle = document.getElementById('adminToggle');
-  function applyAdminState(){
-    const isAdmin = sessionStorage.getItem('isAdmin') === '1';
+  function applyAdminState(isAdmin){
     document.body.classList.toggle('is-admin', isAdmin);
     adminToggle.classList.toggle('on', isAdmin);
     adminToggle.textContent = isAdmin ? '🔓' : '🔒';
   }
-  adminToggle.addEventListener('click', () => {
-    const isAdmin = sessionStorage.getItem('isAdmin') === '1';
-    if(isAdmin){
-      sessionStorage.removeItem('isAdmin');
+  if (firebaseReady()) {
+    firebase.auth().onAuthStateChanged(user => applyAdminState(!!user));
+  } else {
+    // Firebase 설정 전 임시 미리보기 모드 (실제 보안 없음, 브라우저에만 저장)
+    applyAdminState(sessionStorage.getItem('isAdmin') === '1');
+  }
+  adminToggle.addEventListener('click', async () => {
+    if (!firebaseReady()) {
+      const isAdmin = sessionStorage.getItem('isAdmin') === '1';
+      if (isAdmin) {
+        sessionStorage.removeItem('isAdmin');
+        applyAdminState(false);
+        return;
+      }
+      const pw = prompt('관리자 비밀번호를 입력하세요 (Firebase 연동 전 임시 모드)');
+      if (pw === null) return;
+      if (pw === 'dbss0415@') {
+        sessionStorage.setItem('isAdmin', '1');
+        applyAdminState(true);
+      } else {
+        alert('비밀번호가 올바르지 않습니다.');
+      }
+      return;
+    }
+    const isAdmin = !!firebase.auth().currentUser;
+    if (isAdmin) {
+      await firebase.auth().signOut();
     } else {
       const pw = prompt('관리자 비밀번호를 입력하세요');
-      if(pw === ADMIN_PASSWORD){
-        sessionStorage.setItem('isAdmin', '1');
-      } else if(pw !== null){
+      if (pw === null) return;
+      try {
+        await firebase.auth().signInWithEmailAndPassword(ADMIN_EMAIL, pw);
+      } catch (e) {
         alert('비밀번호가 올바르지 않습니다.');
       }
     }
-    applyAdminState();
   });
-  applyAdminState();
 
   /* ===== 모바일 메뉴 토글 ===== */
   const menuToggle = document.getElementById('menuToggle');
