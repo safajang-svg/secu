@@ -950,6 +950,8 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
   function tick(){
     const el = document.getElementById('liveClock');
@@ -963,18 +965,44 @@
   tick();
   setInterval(tick, 1000);
 
-  /* ===== 관리자 게시판 (구글시트 연동) =====
-     이 게시판은 구글 시트를 백엔드로 사용합니다.
-     아래 SHEETS_API_URL에 배포한 구글 앱스 스크립트(Web App) 주소를 넣어야
-     모든 방문자에게 같은 글이 보이고, 브라우저를 껐다 켜거나 다른 기기로 봐도 유지됩니다.
-     설정 방법: Google Sheets에서 확장 프로그램 > Apps Script 에 안내받은 코드를 붙여넣고
-     '배포 > 웹 앱'으로 배포한 뒤(액세스 권한: 전체) 생성된 URL을 아래에 붙여넣으세요. */
+  /* ===== 관리자 게시판 (Firebase Firestore 연동) =====
+     설정 방법
+     1) https://console.firebase.google.com 접속 → 새 프로젝트 만들기
+     2) 프로젝트 개요 화면에서 </> (웹) 아이콘 클릭 → 앱 등록 (Firebase Hosting 체크 안 해도 됨)
+     3) 화면에 나오는 firebaseConfig 값을 복사해서 아래 FIREBASE_CONFIG에 그대로 붙여넣기
+     4) 왼쪽 메뉴 "Firestore Database" → 데이터베이스 만들기 → 위치 선택 후 "테스트 모드로 시작"
+     5) Firestore의 "규칙" 탭에서 아래 내용으로 교체 후 게시:
+          rules_version = '2';
+          service cloud.firestore {
+            match /databases/{database}/documents {
+              match /posts/{postId} {
+                allow read, write: if true;
+              }
+            }
+          }
+        (주의: 이 규칙은 누구나 읽고 쓸 수 있게 여는 규칙입니다. 관리자 비밀번호가
+        화면단에서 글쓰기 버튼을 가려주긴 하지만, 브라우저 개발자도구를 다룰 줄 아는
+        사람은 이 규칙만으로는 막을 수 없습니다. 운영이 안정되면 더 강한 규칙으로
+        바꾸는 걸 권장합니다.) */
 
-  const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbx1HN5zh5rsGjsDqEAKoFt1sYepX4Z1HSDgZrjX_zJtX3kBVGyFsJmsvgW4cmK775-KWQ/exec'; // TODO: 배포한 구글 앱스 스크립트 웹 앱 URL을 여기에 붙여넣으세요
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyCVph2hGA9gFTXC9H6B-u8kdI2S2-Sg8DE",
+    authDomain: "security-instructor.firebaseapp.com",
+    projectId: "security-instructor",
+    storageBucket: "security-instructor.firebasestorage.app",
+    messagingSenderId: "775060095442",
+    appId: "1:775060095442:web:7b0811b55a9f3bf5b3080b"
+  };
+
+  let db = null;
+  if (FIREBASE_CONFIG.apiKey) {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+  }
 
   const ADMIN_PASSWORD = 'dbss0415@';
 
-  const boardCache = {
+  const DEFAULT_POSTS = {
     culture: [
       {id:'c1', title:'신임·직무교육 24시간 12과목 커리큘럼', date:'2026-03-02', content:'아파트 단지 특화 신임/직무교육 커리큘럼 예시입니다. 시설 안내, 근무요령, 화재예방, 응급처치 등 12개 과목으로 구성됩니다.', link:''},
       {id:'c2', title:'여름철 안전교육 자료', date:'2026-06-10', content:'폭염 대비 수칙과 여름철 방범 포인트를 정리한 교육자료 예시입니다.', link:''},
@@ -991,34 +1019,44 @@
     ]
   };
 
-  function apiReady(){ return !!SHEETS_API_URL; }
+  function firebaseReady(){ return !!db; }
 
   async function fetchBoard(key){
-    if(!apiReady()) return boardCache[key] || [];
+    if(!firebaseReady()) return DEFAULT_POSTS[key] ? DEFAULT_POSTS[key].slice() : [];
     try{
-      const res = await fetch(`${SHEETS_API_URL}?action=list&board=${key}`);
-      const data = await res.json();
-      if(data.ok) boardCache[key] = data.posts || [];
+      const snap = await db.collection('posts').where('board', '==', key).get();
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }catch(e){
       console.error('게시판을 불러오지 못했습니다', e);
+      return [];
     }
-    return boardCache[key] || [];
   }
 
   async function apiRequest(action, payload){
-    if(!apiReady()){
-      alert('아직 구글시트 연동 주소(SHEETS_API_URL)가 설정되지 않았습니다. 설정 전까지는 이 브라우저에서만 임시로 보입니다.');
+    if(!firebaseReady()){
+      alert('아직 Firebase 연동 설정(FIREBASE_CONFIG)이 되지 않았습니다. 설정 전까지는 글쓰기가 저장되지 않습니다.');
       return false;
     }
     try{
-      await fetch(SHEETS_API_URL, {
-        method:'POST',
-        headers:{ 'Content-Type':'text/plain;charset=utf-8' }, // 프리플라이트(CORS) 회피용
-        body: JSON.stringify({ action, ...payload })
-      });
+      if(action === 'create'){
+        const { board, post } = payload;
+        await db.collection('posts').doc(post.id).set({
+          board, title: post.title, content: post.content,
+          link: post.link || '', image: post.image || '', date: post.date
+        });
+      } else if(action === 'update'){
+        const { post } = payload;
+        await db.collection('posts').doc(post.id).update({
+          title: post.title, content: post.content,
+          link: post.link || '', image: post.image || '', date: post.date
+        });
+      } else if(action === 'delete'){
+        await db.collection('posts').doc(payload.id).delete();
+      }
       return true;
     }catch(e){
-      alert('저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      console.error(e);
+      alert('저장 중 오류가 발생했습니다. Firestore 규칙(rules) 설정을 확인해주세요.');
       return false;
     }
   }
@@ -1069,7 +1107,7 @@
 
   async function deletePost(key, id){
     if(!confirm('이 글을 삭제할까요?')) return;
-    const ok = await apiRequest('delete', { board:key, id });
+    const ok = await apiRequest('delete', { id });
     if(ok) renderBoard(key);
   }
 
@@ -1100,8 +1138,8 @@
   imageInput.addEventListener('change', () => {
     const file = imageInput.files[0];
     if(!file) return;
-    if(file.size > 30 * 1024){
-      alert('사진 용량이 너무 큽니다 (30KB 이하로 올려주세요). 구글시트 셀 용량 제한 때문에 작은 사진만 첨부할 수 있어요.');
+    if(file.size > 700 * 1024){
+      alert('사진 용량이 너무 큽니다 (700KB 이하로 올려주세요). Firestore 문서 용량 제한(1MB) 때문에 이보다 작은 사진만 첨부할 수 있어요.');
       imageInput.value = '';
       return;
     }
