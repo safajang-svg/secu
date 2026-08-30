@@ -201,10 +201,11 @@
   .post-card h3{font-size:1.05rem; font-weight:800; margin-bottom:6px;}
   .post-card .post-date{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:#8A929A; margin-bottom:10px; display:block;}
   .post-card .post-body{color:#3D4750; font-size:0.94rem; white-space:pre-wrap;}
-  .post-card .post-image{width:100%; max-width:420px; border-radius:4px; margin-bottom:14px; display:block;}
-  .post-card .post-link{display:inline-block; margin-top:10px; font-size:0.86rem; color:var(--seal); text-decoration:underline;}
-  .post-card .post-file{display:inline-block; margin-bottom:14px; padding:8px 14px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.86rem; color:var(--ink); text-decoration:none; background:#F4F1EA;}
+  .post-card .post-attachments{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+  .post-card .post-image{width:100%; max-width:200px; border-radius:4px; display:block; margin-bottom:0;}
+  .post-card .post-file{display:inline-block; padding:8px 14px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.86rem; color:var(--ink); text-decoration:none; background:#F4F1EA;}
   .post-card .post-file:hover{border-color:var(--seal); color:var(--seal);}
+  .post-card .post-link{display:inline-block; margin-top:10px; font-size:0.86rem; color:var(--seal); text-decoration:underline;}
   .post-actions{display:flex; gap:8px; flex-shrink:0;}
   .post-actions button{
     background:none; border:1px solid var(--paper-line); color:#5A636C;
@@ -229,10 +230,12 @@
     font-size:0.94rem; border-radius:2px;
   }
   .modal-box textarea{min-height:140px; resize:vertical;}
-  .image-preview{margin-top:10px;}
-  .image-preview img{max-width:100%; max-height:200px; border-radius:4px; display:block;}
-  .image-preview .file-tag{padding:8px 12px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.86rem; display:inline-block; background:#F4F1EA;}
-  .image-preview .clear-img-btn{margin-top:8px; background:none; border:1px solid var(--paper-line); padding:5px 10px; font-size:0.78rem; border-radius:2px; cursor:pointer; color:#5A636C; display:block;}
+  .image-preview{margin-top:10px; display:flex; flex-wrap:wrap; gap:10px;}
+  .image-preview .attach-item{display:flex; flex-direction:column; align-items:flex-start; gap:6px; border:1px solid var(--paper-line); border-radius:4px; padding:8px; background:#FBF9F4;}
+  .image-preview .attach-item img{max-width:140px; max-height:140px; border-radius:4px; display:block;}
+  .image-preview .file-tag{padding:6px 10px; border:1px solid var(--paper-line); border-radius:4px; font-size:0.82rem; display:inline-block; background:#F4F1EA; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .image-preview .clear-img-btn{background:none; border:1px solid var(--paper-line); padding:4px 9px; font-size:0.74rem; border-radius:2px; cursor:pointer; color:#5A636C;}
+  .image-preview .attach-count{width:100%; font-size:0.78rem; color:#8A8375;}
   .modal-actions{display:flex; gap:10px; margin-top:22px; justify-content:flex-end;}
   .modal-actions button{cursor:pointer;}
   .modal-actions .cancel-btn{background:none; border:1px solid var(--paper-line); padding:10px 18px; border-radius:2px; font-family:'Gothic A1',sans-serif; font-weight:700; font-size:0.9rem;}
@@ -943,8 +946,8 @@
     <textarea id="m-content" placeholder="내용을 입력하세요"></textarea>
     <label for="m-link">참고 링크 (선택)</label>
     <input id="m-link" type="text" placeholder="https://...">
-    <label for="m-image">파일 첨부 (사진·PDF·문서 등, 선택)</label>
-    <input id="m-image" type="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.hwp,.hwpx,.txt,.zip">
+    <label for="m-image">파일 첨부 (사진·PDF·문서 등, 여러 개 가능)</label>
+    <input id="m-image" type="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.hwp,.hwpx,.txt,.zip" multiple>
     <div id="m-image-preview" class="image-preview"></div>
     <div class="modal-actions">
       <button type="button" class="cancel-btn" id="modalCancel">취소</button>
@@ -1049,13 +1052,13 @@
         const { board, post } = payload;
         await db.collection('posts').doc(post.id).set({
           board, title: post.title, content: post.content,
-          link: post.link || '', image: post.image || '', fileName: post.fileName || '', date: post.date
+          link: post.link || '', attachments: post.attachments || [], date: post.date
         });
       } else if(action === 'update'){
         const { post } = payload;
         await db.collection('posts').doc(post.id).update({
           title: post.title, content: post.content,
-          link: post.link || '', image: post.image || '', fileName: post.fileName || '', date: post.date
+          link: post.link || '', attachments: post.attachments || [], date: post.date
         });
       } else if(action === 'delete'){
         await db.collection('posts').doc(payload.id).delete();
@@ -1085,12 +1088,19 @@
       const card = document.createElement('div');
       card.className = 'post-card';
       const linkHtml = post.link ? `<a class="post-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">관련 링크 열기 →</a>` : '';
-      const isImageFile = (post.image || '').startsWith('data:image/');
+      const attachments = post.attachments && post.attachments.length
+        ? post.attachments
+        : (post.image ? [{ data: post.image, fileName: post.fileName || '' }] : []);
       let attachHtml = '';
-      if(post.image && isImageFile){
-        attachHtml = `<img class="post-image" src="${post.image}" alt="${escapeAttr(post.title)} 첨부 이미지">`;
-      } else if(post.image){
-        attachHtml = `<a class="post-file" href="${post.image}" download="${escapeAttr(post.fileName || '첨부파일')}">📎 ${escapeHtml(post.fileName || '첨부파일')} 다운로드</a>`;
+      if(attachments.length){
+        const items = attachments.map(att => {
+          const isImg = (att.data || '').startsWith('data:image/');
+          if(isImg){
+            return `<img class="post-image" src="${att.data}" alt="${escapeAttr(post.title)} 첨부 이미지">`;
+          }
+          return `<a class="post-file" href="${att.data}" download="${escapeAttr(att.fileName || '첨부파일')}">📎 ${escapeHtml(att.fileName || '첨부파일')} 다운로드</a>`;
+        }).join('');
+        attachHtml = `<div class="post-attachments">${items}</div>`;
       }
       card.innerHTML = `
         <div class="post-top">
@@ -1124,58 +1134,90 @@
     if(ok) renderBoard(key);
   }
 
-  let modalState = { board:null, id:null, image:null, fileName:null, date:null };
+  const MAX_ATTACHMENTS = 3;
+  const MAX_TOTAL_BYTES = 900 * 1024; // Firestore 문서 1MB 제한을 감안한 첨부파일 총합 한도(base64 기준)
+
+  let modalState = { board:null, id:null, attachments:[], date:null };
   const modal = document.getElementById('postModal');
   const imageInput = document.getElementById('m-image');
   const imagePreview = document.getElementById('m-image-preview');
 
+  function currentAttachTotalBytes(){
+    return modalState.attachments.reduce((sum, a) => sum + (a.data ? a.data.length : 0), 0);
+  }
+
   function renderImagePreview(){
     imagePreview.innerHTML = '';
-    if(modalState.image){
-      const isImageFile = modalState.image.startsWith('data:image/');
-      if(isImageFile){
+    if(!modalState.attachments.length) return;
+    const countEl = document.createElement('div');
+    countEl.className = 'attach-count';
+    countEl.textContent = `첨부 ${modalState.attachments.length}/${MAX_ATTACHMENTS}개`;
+    imagePreview.appendChild(countEl);
+    modalState.attachments.forEach((att, idx) => {
+      const item = document.createElement('div');
+      item.className = 'attach-item';
+      const isImg = (att.data || '').startsWith('data:image/');
+      if(isImg){
         const img = document.createElement('img');
-        img.src = modalState.image;
-        imagePreview.appendChild(img);
+        img.src = att.data;
+        item.appendChild(img);
       } else {
         const fileTag = document.createElement('div');
         fileTag.className = 'file-tag';
-        fileTag.textContent = '📎 ' + (modalState.fileName || '첨부파일');
-        imagePreview.appendChild(fileTag);
+        fileTag.textContent = '📎 ' + (att.fileName || '첨부파일');
+        item.appendChild(fileTag);
       }
       const clearBtn = document.createElement('button');
       clearBtn.type = 'button';
       clearBtn.className = 'clear-img-btn';
-      clearBtn.textContent = '파일 제거';
+      clearBtn.textContent = '제거';
       clearBtn.addEventListener('click', () => {
-        modalState.image = null;
-        modalState.fileName = null;
-        imageInput.value = '';
+        modalState.attachments.splice(idx, 1);
         renderImagePreview();
       });
-      imagePreview.appendChild(clearBtn);
-    }
+      item.appendChild(clearBtn);
+      imagePreview.appendChild(item);
+    });
   }
 
-  imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    if(!file) return;
-    if(file.size > 700 * 1024){
-      alert('파일 용량이 너무 큽니다 (700KB 이하로 올려주세요). Firestore 문서 용량 제한(1MB) 때문에 이보다 작은 파일만 첨부할 수 있어요.');
-      imageInput.value = '';
-      return;
+  function readFileAsDataUrl(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  imageInput.addEventListener('change', async () => {
+    const files = Array.from(imageInput.files || []);
+    imageInput.value = '';
+    if(!files.length) return;
+    for(const file of files){
+      if(modalState.attachments.length >= MAX_ATTACHMENTS){
+        alert(`첨부파일은 최대 ${MAX_ATTACHMENTS}개까지 가능합니다.`);
+        break;
+      }
+      if(file.size > 500 * 1024){
+        alert(`"${file.name}" 파일이 너무 큽니다 (500KB 이하로 올려주세요).`);
+        continue;
+      }
+      if(currentAttachTotalBytes() + file.size * 1.4 > MAX_TOTAL_BYTES){
+        alert('첨부파일 총 용량이 너무 큽니다. Firestore 문서 용량 제한(1MB) 때문에 파일을 줄이거나 개수를 줄여주세요.');
+        break;
+      }
+      try{
+        const data = await readFileAsDataUrl(file);
+        modalState.attachments.push({ data, fileName: file.name });
+      }catch(e){
+        console.error(e);
+      }
     }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      modalState.image = e.target.result;
-      modalState.fileName = file.name;
-      renderImagePreview();
-    };
-    reader.readAsDataURL(file);
+    renderImagePreview();
   });
 
   async function openModal(boardKey, postId){
-    modalState = { board: boardKey, id: postId || null, image: null, fileName: null, date: null };
+    modalState = { board: boardKey, id: postId || null, attachments: [], date: null };
     const titleEl = document.getElementById('modalTitle');
     const tInput = document.getElementById('m-title');
     const cInput = document.getElementById('m-content');
@@ -1187,8 +1229,11 @@
       tInput.value = post ? post.title : '';
       cInput.value = post ? post.content : '';
       lInput.value = post ? (post.link || '') : '';
-      modalState.image = post && post.image ? post.image : null;
-      modalState.fileName = post && post.fileName ? post.fileName : null;
+      if(post && post.attachments && post.attachments.length){
+        modalState.attachments = post.attachments.map(a => ({ data: a.data, fileName: a.fileName || '' }));
+      } else if(post && post.image){
+        modalState.attachments = [{ data: post.image, fileName: post.fileName || '' }];
+      }
       modalState.date = post ? post.date : null;
     } else {
       titleEl.textContent = '글쓰기';
@@ -1206,17 +1251,16 @@
     const title = document.getElementById('m-title').value.trim();
     const content = document.getElementById('m-content').value.trim();
     const link = document.getElementById('m-link').value.trim();
-    const image = modalState.image || null;
-    const fileName = modalState.fileName || null;
+    const attachments = modalState.attachments.slice();
     if(!title || !content){ alert('제목과 내용을 입력해주세요.'); return; }
     const key = modalState.board;
     const today = new Date().toISOString().slice(0,10);
     const date = modalState.id ? (modalState.date || today) : today;
     let ok;
     if(modalState.id){
-      ok = await apiRequest('update', { board:key, post:{ id: modalState.id, title, content, link, image, fileName, date } });
+      ok = await apiRequest('update', { board:key, post:{ id: modalState.id, title, content, link, attachments, date } });
     } else {
-      ok = await apiRequest('create', { board:key, post:{ id: 'p' + Date.now(), title, content, link, image, fileName, date } });
+      ok = await apiRequest('create', { board:key, post:{ id: 'p' + Date.now(), title, content, link, attachments, date } });
     }
     if(ok){
       renderBoard(key);
