@@ -181,6 +181,7 @@
   @media (max-width:860px){ form.contact-form{margin-top:0;} }
 
   footer.site{background:var(--navy-950); color:#7A8590; font-size:0.8rem; padding:24px 0 40px; border-top:1px solid rgba(255,255,255,0.1);}
+  .visit-count{margin-left:10px; color:#5A636C;}
 
   /* ---------- ADMIN + BOARDS ---------- */
   .admin-toggle{
@@ -934,7 +935,7 @@
 </section>
 
 <footer class="site">
-  <div class="wrap">© 2026 짱지도사. 경비업법에 따른 지도·감독, 직무교육, 리스크 자문 서비스.</div>
+  <div class="wrap">© 2026 짱지도사. 경비업법에 따른 지도·감독, 직무교육, 리스크 자문 서비스. <span id="visit-count" class="visit-count"></span></div>
 </footer>
 
 <div class="modal-overlay" id="postModal">
@@ -1273,6 +1274,48 @@
   });
 
   ['culture','aicoding','archive'].forEach(renderBoard);
+
+  /* ===== 방문자 수 카운트 =====
+     내(운영자) 방문은 세지 않으려면, 아래 형태의 링크로 한 번만 접속하세요.
+     그러면 이 브라우저는 앞으로 계속 방문자 수 집계에서 제외됩니다.
+       https://안전한도메인/?owner=1
+     (실제 방문 주소 뒤에 ?owner=1 만 붙이면 됩니다.)
+     주의: 같은 사람이 새로고침을 여러 번 해도 "세션 1회"로만 집계되고,
+     브라우저를 새로 열거나 다른 기기로 접속하면 별도로 집계되는
+     대략적인 "방문 횟수"이며, 정교한 순수 방문자수 통계는 아닙니다. */
+
+  const OWNER_KEY = 'jjangSiteOwner';
+  const urlParams = new URLSearchParams(location.search);
+  if (urlParams.get('owner') === '1') {
+    localStorage.setItem(OWNER_KEY, '1');
+  }
+  const isOwnerVisit = localStorage.getItem(OWNER_KEY) === '1';
+
+  async function trackVisit(){
+    if (!firebaseReady() || isOwnerVisit) return;
+    if (sessionStorage.getItem('visitCounted') === '1') return;
+    sessionStorage.setItem('visitCounted', '1');
+    try {
+      await db.collection('stats').doc('visits').set(
+        { count: firebase.firestore.FieldValue.increment(1) },
+        { merge: true }
+      );
+    } catch(e){ console.error('방문 카운트 실패', e); }
+  }
+
+  async function renderVisitCount(){
+    const el = document.getElementById('visit-count');
+    if (!el || !firebaseReady()) return;
+    try {
+      const snap = await db.collection('stats').doc('visits').get();
+      const count = snap.exists ? (snap.data().count || 0) : 0;
+      el.textContent = isOwnerVisit
+        ? `방문자 수: ${count.toLocaleString()}명 (내 방문 제외 집계 중)`
+        : `방문자 수: ${count.toLocaleString()}명`;
+    } catch(e){ console.error('방문자 수 조회 실패', e); }
+  }
+
+  trackVisit().then(renderVisitCount);
 
   /* ===== 관리자 로그인 토글 (Firebase Authentication 연동) ===== */
   const adminToggle = document.getElementById('adminToggle');
